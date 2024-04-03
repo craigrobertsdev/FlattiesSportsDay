@@ -3,6 +3,7 @@
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
 @using System.Text.Json
+@inject NavigationManager NavManager
 
 <h1 class="text-xl text-center">McLaren Flat Sports Day - Room @RoomNumber</h1>
 @if (Error != null) {
@@ -28,7 +29,7 @@
 
     protected override void OnInitialized() {
         var rooms = JsonSerializer.Deserialize<Class>(File.ReadAllText($"ScoreCards/Room{RoomNumber}.json"));
-        Houses = rooms.Houses;
+        Houses = rooms!.Houses;
     }
 
 }
