@@ -1,0 +1,80 @@
+@page "/school-events"
+@using SportsDayScoring.Models
+@using System.Text.Json
+@inject NavigationManager NavigationManager
+
+<div class="flex flex-col gap-2 p-2 w-[300px]">
+    <div class="flex gap-4 w-[180px] items-center justify-center m-2">
+        <select @bind=SelectedEvent class="border border-black bg-yellow-300 text-center p-2">
+            <option disabled selected hidden></option>
+            @foreach (var ev in Events) {
+                <option value="@ev">@ev</option>
+            }
+        </select>
+    </div>
+    <div class="flex gap-4 w-[200px] items-center justify-center">
+        <p class="font-bold">40 points</p>
+        <select @bind=FourtyPoints class="font-bold border border-black p-2">
+            <option disabled selected hidden></option>
+            @for (int i = 0; i < HouseColours.Length; i++) {
+                <option value="@HouseNames[i]">
+                    <p class="h-[20px] w-[20px]">@HouseNames[i]</p>
+                </option>
+            }
+        </select>
+    </div>
+    <div class="flex gap-4 w-[200px] items-center justify-center">
+        <p class="font-bold">30 points</p>
+        <select @bind=ThirtyPoints class="font-bold border border-black p-2">
+            <option disabled selected hidden></option>
+            @for (int i = 0; i < HouseColours.Length; i++) {
+                <option value="@HouseNames[i]">
+                    <p class="h-[20px] w-[20px]">@HouseNames[i]</p>
+                </option>
+            }
+        </select>
+    </div>
+    <div class="flex gap-4 w-[200px] items-center justify-center">
+        <p class="font-bold">20 points</p>
+        <select @bind=TwentyPoints class="font-bold border border-black p-2">
+            <option disabled selected hidden></option>
+            @for (int i = 0; i < HouseColours.Length; i++) {
+                <option value="@HouseNames[i]">
+                    <p class="h-[20px] w-[20px]">@HouseNames[i]</p>
+                </option>
+            }
+        </select>
+    </div>
+    <button class="@(error ? "bg-red-600" : "bg-slate-200") font-bold" @onclick=SaveScores>Save Scores</button>
+</div>
+
+@code {
+    public List<House> Houses { get; set; } = [];
+    public bool error;
+    public readonly List<string> Events = ["Sprints", "House 100m Baton Relay", "Whole School Ribbon Relay", "Tug of War", "Team Chants"];
+    public string? SelectedEvent { get; set; }
+
+    public string? FourtyPoints { get; set; }
+    public string? ThirtyPoints { get; set; }
+    public string? TwentyPoints { get; set; }
+    public string[] HouseColours = ["text-red-400", "text-blue-400", "text-green-400", "text-yellow-400"];
+    public string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
+
+    protected override void OnInitialized() {
+        var houses = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
+        Houses = houses!;
+    }
+
+    public void SaveScores() {
+        if (SelectedEvent is null || FourtyPoints is null || ThirtyPoints is null || TwentyPoints is null) {
+            error = true;
+            return;
+        }
+        Houses.First(h => h.Name == FourtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 40;
+        Houses.First(h => h.Name == ThirtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 30;
+        Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 20;
+
+        File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(Houses));
+        NavigationManager.NavigateTo("/school-events", true);
+    }
+}

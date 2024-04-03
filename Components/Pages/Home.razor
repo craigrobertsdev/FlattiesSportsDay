@@ -39,6 +39,9 @@
             File.WriteAllText(filePath, JsonSerializer.Serialize(room));
         }
 
+        var houses = Seed.GetHousesSchoolEvents();
+        File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(houses));
+
         NavigationManager.NavigateTo("/");
     }
 }

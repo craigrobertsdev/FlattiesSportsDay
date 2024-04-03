@@ -5,40 +5,41 @@ namespace SportsDayScoring.Data;
 public static class Seed {
     public static List<string> HouseNames { get; set; } = ["Sturt", "Wickham", "Elliott", "Leslie"];
     public static List<string> ClassEvents { get; set; } = ["Long Jump", "Gaga Ball", "Bombardment", "Marathon", "Hurdles", "Nerf Javelin", "Spoke Relay", "Shot Put"];
+    public static List<string> SchoolEvents { get; set; } = ["Sprints", "House 100m Baton Relay", "Whole School Ribbon Relay", "Tug of War", "Team Chants"];
 
     public static List<int> RoomNumbers { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
     public static List<Class> Rooms = [
         new Class {
             RoomNumber = 5,
-            Houses = GetHouses(7)
+            Houses = GetHousesClassEvents(7)
             },
         new Class {
             RoomNumber = 6,
-            Houses = GetHouses(0),
+            Houses = GetHousesClassEvents(0),
             },
         new Class {
             RoomNumber = 7,
-            Houses = GetHouses(5)
+            Houses = GetHousesClassEvents(5)
             },
         new Class {
             RoomNumber = 8,
-            Houses = GetHouses(6),
+            Houses = GetHousesClassEvents(6),
         },
         new Class {
             RoomNumber = 12,
-            Houses = GetHouses(1),
+            Houses = GetHousesClassEvents(1),
         },
         new Class {
             RoomNumber = 13,
-            Houses = GetHouses(2),
+            Houses = GetHousesClassEvents(2),
         },
         new Class {
             RoomNumber = 14,
-            Houses = GetHouses(3),
+            Houses = GetHousesClassEvents(3),
         },
         new Class {
             RoomNumber = 15,
-            Houses = GetHouses(4),
+            Houses = GetHousesClassEvents(4),
         }
         ];
 
@@ -60,7 +61,17 @@ public static class Seed {
         return events;
     }
 
-    public static List<House> GetHouses(int offset) {
+    public static List<Event> GetSchoolEvents() {
+        List<Event> events = [];
+        foreach (var eventName in SchoolEvents) {
+            events.Add(new Event {
+                Name = eventName
+            });
+        }
+        return events;
+    }
+
+    public static List<House> GetHousesClassEvents(int offset) {
         List<House> houses = [];
         foreach (var houseName in HouseNames) {
             houses.Add(new House {
@@ -70,5 +81,17 @@ public static class Seed {
         }
         return houses;
 
+    }
+
+    public static List<House> GetHousesSchoolEvents() {
+        List<House> houses = [];
+        foreach (var houseName in HouseNames) {
+            houses.Add(new House {
+                Name = houseName,
+                Events = GetSchoolEvents()
+            });
+        }
+
+        return houses;
     }
 }
