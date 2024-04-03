@@ -7,19 +7,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<Class>()
-            .HasKey()
-
-        modelBuilder.Entity<Class>()
-            .OwnsMany(c => c.Houses, hb => { 
-                hb.HasKey(h => h.Id);
-
-                hb.OwnsMany(h => h.Events, eb => {
-                    eb.HasKey(e => e.Id);
-                });
-            });
-
-        modelBuilder.Entity<Class>().HasData(Seed.Rooms);
     }
 }
