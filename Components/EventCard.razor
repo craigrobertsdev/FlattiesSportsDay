@@ -1,0 +1,125 @@
+@using SportsDayScoring.Components.Pages
+
+<div class="grid grid-cols-[150px_repeat(4,_0.7fr)_1fr] grid-rows-2 overflow-x-auto border border-black w-\[500px\] mb-3">
+    <div class="pl-2 row-start-1 row-span-2 col-start-1 flex justify-center items-center font-bold bg-slate-200">
+        @EventName
+    </div>
+    @*      red house *@
+    <div class="row-start-1 row-span-2 col-start-2">
+        <div class="row-span-2">
+            <select class="border-b w-full text-center bg-red-400 p-1" @onchange=@((e) => HandleAthleticScoreChange(e, "Sturt"))>
+                <option disabled selected>Athletic</option>
+                @foreach (var score in AthleticScores) {
+                    var athleticScore = Parent.Houses.FirstOrDefault(h => h.Name == "Sturt")?.Events.FirstOrDefault(e => e.Name == EventName)?.AthleticScore;
+                    if (athleticScore is null || score != athleticScore) {
+                        <option value="@score">@score</option>
+                    }
+                }
+            </select>
+            <select class="w-full text-center bg-red-400 p-1" @onchange=@((e) => HandleSpiritScoreChange(e, "Sturt"))>
+                <option disabled selected>Spirit</option>
+                @foreach (var score in SpiritScores) {
+                    if (!(score == Parent.Houses.FirstOrDefault(h => h.Name == "Sturt")?.Events.FirstOrDefault(e => e.Name == EventName)?.AthleticScore)) {
+                        <option value="@score">@score</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    @*      blue house *@
+    <div class="row-start-1 row-span-2 col-start-3">
+        <div class="row-span-2">
+            <select class="w-full text-center bg-blue-400 border-b p-1" @onchange=@((e) => HandleAthleticScoreChange(e, "Wickham"))>
+                <option disabled selected>Athletic</option>
+                @foreach (var score in AthleticScores) {
+                    var athleticScore = Parent.Houses.FirstOrDefault(h => h.Name == "Wickham")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore;
+                    if (athleticScore is null || score != athleticScore) {
+                        <option value="@score">@score</option>
+                    }
+                }
+            </select>
+            <select class="w-full text-center bg-blue-400 p-1" @onchange=@((e) => HandleSpiritScoreChange(e, "Wickham"))>
+                <option disabled selected>Spirit</option>
+                @foreach (var score in SpiritScores) {
+                    if (!(score == Parent.Houses.FirstOrDefault(h => h.Name == "Wickham")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore)) {
+                        <option value="@score">@score</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    @*      green house *@
+    <div class="row-start-1 row-span-2 col-start-4">
+        <div class="row-span-2"></div>
+        <select class="w-full text-center bg-green-400 border-b p-1" @onchange=@((e) => HandleAthleticScoreChange(e, "Elliott"))>
+            <option disabled selected>Athletic</option>
+            @foreach (var score in AthleticScores) {
+                var athleticScore = Parent.Houses.FirstOrDefault(h => h.Name == "Elliott")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore;
+                if (athleticScore is null || score != athleticScore) {
+                    <option class="" value="@score">@score</option>
+                }
+            }
+        </select>
+        <select class="w-full text-center bg-green-400 p-1" @onchange=@((e) => HandleSpiritScoreChange(e, "Elliott"))>
+            <option disabled selected>Spirit</option>
+            @foreach (var score in SpiritScores) {
+                if (!(score == Parent.Houses.FirstOrDefault(h => h.Name == "Elliott")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore)) {
+                    <option value="@score">@score</option>
+                }
+            }
+        </select>
+    </div>
+    @*      yellow house *@
+    <div class="row-start-1 row-span-2 col-start-5 ">
+        <div class="row-span-2"></div>
+        <select class="w-full text-center bg-yellow-400 border-b p-1" @onchange=@((e) => HandleAthleticScoreChange(e, "Leslie"))>
+            <option disabled selected>Athletic</option>
+            @foreach (var score in AthleticScores) {
+                var athleticScore = Parent.Houses.FirstOrDefault(h => h.Name == "Leslie")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore;
+                if (athleticScore is null || score != athleticScore) {
+                    <option value="@score">@score</option>
+                }
+            }
+        </select>
+        <select class="w-full text-center bg-yellow-400 p-1" @onchange=@((e) => HandleSpiritScoreChange(e, "Leslie"))>
+            <option disabled selected>Spirit</option>
+            @foreach (var score in SpiritScores) {
+                if (!(score == Parent.Houses.FirstOrDefault(h => h.Name == "Leslie")?.Events.FirstOrDefault(e => e.Name == EventName)!.AthleticScore)) {
+                    <option value="@score">@score</option>
+                }
+            }
+        </select>
+    </div>
+    <button class="row-start-1 row-span-2 col-start-6 bg-slate-200 font-bold" @onclick=SaveScores>@(Disabled ? "" : "Save Scores")</button>
+</div>
+
+@code {
+    [CascadingParameter]
+    public ClassEvents Parent { get; set; } = null!;
+
+    [Parameter]
+    public string EventName { get; set; } = string.Empty;
+
+    [Parameter]
+    public bool Disabled { get; set; }
+
+    public List<int> AthleticScores = [10, 20, 30, 40];
+    public List<int> SpiritScores = [-10, 0, 10, 20, 30, 40];
+
+    public async Task SaveScores() {
+
+    }
+
+    public void HandleAthleticScoreChange(ChangeEventArgs e, string houseName) {
+        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).AthleticScore = (int)e.Value!;
+        StateHasChanged();
+    }
+
+    public void HandleSpiritScoreChange(ChangeEventArgs e, string houseName) {
+        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).SpiritScore = (int)e.Value!;
+        StateHasChanged();
+    }
+
+
+}
+

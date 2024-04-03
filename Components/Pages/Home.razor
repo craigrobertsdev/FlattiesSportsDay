@@ -1,0 +1,29 @@
+@page "/"
+@using SportsDayScoring.Data
+@using SportsDayScoring.Models
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
+
+<PageTitle>Home</PageTitle>
+
+<div class="flex">
+    <div>
+        <select @bind=SelectedRoom>
+            @foreach (var room in Rooms) {
+                <option value="@room">Room @room</option>
+            }
+        </select>
+        <button @onclick=NavigateToClassEvents class="border p-2 text-lg bg-sky-500">Class Events</button>
+    </div>
+    <a href="/school-events">Whole School Events</a>
+    <a href="/score">Score Tally</a>
+</div>
+
+@code {
+    public List<int> Rooms { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
+    public int SelectedRoom { get; set; }
+
+    public void NavigateToClassEvents() {
+        NavigationManager.NavigateTo($"/class-events/{SelectedRoom}");
+    }
+}

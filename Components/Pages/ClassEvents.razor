@@ -1,0 +1,42 @@
+@page "/class-events/{roomNumber:int}"
+@using Microsoft.EntityFrameworkCore
+@using SportsDayScoring.Data
+@using SportsDayScoring.Models
+
+@inject ApplicationDbContext _context
+
+<h1 class="text-xl text-center">McLaren Flat Sports Day - Room @RoomNumber</h1>
+<div class="overflow-x-auto py-2">
+    <CascadingValue Value="this">
+        @if (Houses.Count == 0) {
+            <p>Loading...</p>
+        }
+        else {
+            @foreach (var ev in Houses.First().Events) {
+                <EventCard EventName="@ev.Name" />
+            }
+        }
+    </CascadingValue>
+</div>
+
+@code {
+    [Parameter]
+    public int RoomNumber { get; set; }
+
+    public List<House> Houses { get; set; } = [];
+
+    protected override async Task OnInitializedAsync() {
+        // var room = await _context.Rooms
+        //     .Where(r => r.RoomNumber == RoomNumber)
+        //     .Include(r => r.Houses)
+        //     .ThenInclude(h => h.Events)
+        //     .FirstAsync();
+
+        // Houses = room.Houses;
+
+        var houses = Seed.Rooms.First(r => r.RoomNumber == RoomNumber).Houses;
+        Houses = houses;
+    }
+
+
+}
