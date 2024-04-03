@@ -38,5 +38,7 @@
             var filePath = $"ScoreCards/Room{room.RoomNumber}.json";
             File.WriteAllText(filePath, JsonSerializer.Serialize(room));
         }
+
+        NavigationManager.NavigateTo("/");
     }
 }
