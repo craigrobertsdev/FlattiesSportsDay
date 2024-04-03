@@ -1,6 +1,7 @@
 @page "/"
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
+@using System.Text.Json
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 
@@ -17,6 +18,7 @@
     </div>
     <a href="/school-events">Whole School Events</a>
     <a href="/score">Score Tally</a>
+    <button @onclick=SeedData>Seed data</button>
 </div>
 
 @code {
@@ -25,5 +27,14 @@
 
     public void NavigateToClassEvents() {
         NavigationManager.NavigateTo($"/class-events/{SelectedRoom}");
+    }
+
+    public void SeedData() {
+        var rooms = Seed.Rooms;
+
+        foreach (var room in rooms) {
+            var filePath = $"ScoreCards/Room{room.RoomNumber}.json";
+            File.WriteAllText(filePath, JsonSerializer.Serialize(room));
+        }
     }
 }

@@ -2,21 +2,21 @@
 @using Microsoft.EntityFrameworkCore
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
-
-@inject ApplicationDbContext _context
+@using System.Text.Json
 
 <h1 class="text-xl text-center">McLaren Flat Sports Day - Room @RoomNumber</h1>
+@if (Error != null) {
+    <div class="text-red-600">@Error</div>
+}
 <div class="overflow-x-auto py-2">
-    <CascadingValue Value="this">
         @if (Houses.Count == 0) {
             <p>Loading...</p>
         }
         else {
             @foreach (var ev in Houses.First().Events) {
-                <EventCard EventName="@ev.Name" />
+                <EventCard EventName="@ev.Name" Parent="this" />
             }
         }
-    </CascadingValue>
 </div>
 
 @code {
@@ -24,19 +24,11 @@
     public int RoomNumber { get; set; }
 
     public List<House> Houses { get; set; } = [];
+    public string? Error = null;
 
-    protected override async Task OnInitializedAsync() {
-        // var room = await _context.Rooms
-        //     .Where(r => r.RoomNumber == RoomNumber)
-        //     .Include(r => r.Houses)
-        //     .ThenInclude(h => h.Events)
-        //     .FirstAsync();
-
-        // Houses = room.Houses;
-
-        var houses = Seed.Rooms.First(r => r.RoomNumber == RoomNumber).Houses;
-        Houses = houses;
+    protected override void OnInitialized() {
+        var rooms = JsonSerializer.Deserialize<Class>(File.ReadAllText($"ScoreCards/Room{RoomNumber}.json"));
+        Houses = rooms.Houses;
     }
-
 
 }

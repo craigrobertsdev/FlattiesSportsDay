@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using SportsDayScoring.Components;
-using SportsDayScoring.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,11 +7,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(connectionString);
-    options.EnableSensitiveDataLogging();
-    });
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var app = builder.Build();

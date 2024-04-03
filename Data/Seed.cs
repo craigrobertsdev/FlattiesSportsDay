@@ -42,11 +42,6 @@ public static class Seed {
         }
         ];
 
-    // Sturt - red
-    // Wickham - blue
-    // Elliott - green
-    // Leslie - yellow
-
     public static List<Event> GetClassEvents(int offset) {
         List<Event> events = [];
         var idx = offset;
