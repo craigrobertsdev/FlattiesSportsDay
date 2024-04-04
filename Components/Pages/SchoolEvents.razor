@@ -3,10 +3,10 @@
 @using System.Text.Json
 @inject NavigationManager NavigationManager
 
-<div class="flex flex-col gap-2 p-2 w-[300px]">
-    <div class="flex gap-4 w-[180px] items-center justify-center m-2">
-        <select @bind=SelectedEvent class="border border-black bg-yellow-300 text-center p-2">
-            <option disabled selected hidden></option>
+<div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
+    <div class="flex gap-4 w-full items-center justify-center m-2">
+        <select @bind=SelectedEvent class="border border-black bg-gray-300 font-bold text-center p-2">
+            <option disabled selected hidden>Select Event</option>
             @foreach (var ev in Events) {
                 <option value="@ev">@ev</option>
             }
@@ -45,7 +45,24 @@
             }
         </select>
     </div>
-    <button class="@(error ? "bg-red-600" : "bg-slate-200") font-bold" @onclick=SaveScores>Save Scores</button>
+    @if (SelectedEvent == "Tug of War" || SelectedEvent == "Team Chants") {
+        <div class="flex gap-4 w-[200px] items-center justify-center">
+            <p class="font-bold">10 points</p>
+            <select @bind=TenPoints class="font-bold border border-black p-2">
+                <option disabled selected hidden></option>
+                @for (int i = 0; i < HouseColours.Length; i++) {
+                    <option value="@HouseNames[i]">
+                        <p class="h-[20px] w-[20px]">@HouseNames[i]</p>
+                    </option>
+                }
+            </select>
+        </div>
+
+    }
+    <button class="@(error ? "bg-red-600" : "bg-green-600") font-bold p-2 w-full" @onclick=SaveScores>Save Scores</button>
+    <div class="w-full p-2 bg-orange-600 text-center">
+        <a class="font-bold" href="/">Return Home</a>
+    </div>
 </div>
 
 @code {
@@ -57,6 +74,7 @@
     public string? FourtyPoints { get; set; }
     public string? ThirtyPoints { get; set; }
     public string? TwentyPoints { get; set; }
+    public string? TenPoints { get; set; }
     public string[] HouseColours = ["text-red-400", "text-blue-400", "text-green-400", "text-yellow-400"];
     public string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
 
@@ -70,9 +88,20 @@
             error = true;
             return;
         }
-        Houses.First(h => h.Name == FourtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 40;
-        Houses.First(h => h.Name == ThirtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 30;
-        Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 20;
+        if (SelectedEvent != "Team Chants") {
+            Houses.First(h => h.Name == FourtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 40;
+            Houses.First(h => h.Name == ThirtyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 30;
+            Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 20;
+            if (SelectedEvent == "Tug of War") {
+                Houses.First(h => h.Name == TenPoints).Events.First(e => e.Name == SelectedEvent).AthleticScore += 10;
+            }
+        }
+        else {
+            Houses.First(h => h.Name == FourtyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 40;
+            Houses.First(h => h.Name == ThirtyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 30;
+            Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 20;
+            Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 10;
+        }
 
         File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(Houses));
         NavigationManager.NavigateTo("/school-events", true);

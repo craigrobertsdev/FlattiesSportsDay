@@ -5,19 +5,24 @@
 @using System.Text.Json
 @inject NavigationManager NavManager
 
-<h1 class="text-xl text-center">McLaren Flat Sports Day - Room @RoomNumber</h1>
+<h1 class="text-xl text-center font-bold px-4 items-center relative">
+    Room @RoomNumber
+    <span class="absolute right-[3px] top-[3px] font-normal rounded-md px-2 bg-sky-200 border border-black">
+        <a class="text-lg" href="/">Return Home</a>
+    </span>
+</h1>
 @if (Error != null) {
     <div class="text-red-600">@Error</div>
 }
-<div class="overflow-x-auto py-2">
-        @if (Houses.Count == 0) {
-            <p>Loading...</p>
+<div class="overflow-x-auto my-2">
+    @if (Houses.Count == 0) {
+        <p>Loading...</p>
+    }
+    else {
+        @foreach (var ev in Houses.First().Events) {
+            <EventCard EventName="@ev.Name" Parent="this" />
         }
-        else {
-            @foreach (var ev in Houses.First().Events) {
-                <EventCard EventName="@ev.Name" Parent="this" />
-            }
-        }
+    }
 </div>
 
 @code {

@@ -7,18 +7,20 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="h-full w-full flex justify-center items-center">
+<div class="h-full flex flex-col justify-center items-center gap-6">
+    <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day 2024</h1>
     <div class="flex flex-col gap-4">
-        <div class="pb-3 border-b border-black">
-            <select @bind=SelectedRoom class="border border-black bg-yellow-400 p-2">
+        <div>
+            <select @bind=SelectedRoom class="border border-black bg-slate-200 p-2">
                 <option selected disabled hidden>Select a room</option>
                 @foreach (var room in Rooms) {
                     <option value="@room">Room @room</option>
                 }
             </select>
-            <button @onclick=NavigateToClassEvents class="border p-2 text-lg bg-sky-500">Class Events</button>
+            <button @onclick=NavigateToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Go to Class Events</button>
         </div>
         <a class="border rounded-md text-center text-lg p-3 bg-blue-400" href="/school-events">Whole School Events</a>
+        <a class="border rounded-md text-center text-lg p-3 bg-yellow-400" href="/spirit">Add Spirit Points</a>
         <a class="border rounded-md text-center text-lg p-3 bg-green-400" href="/scores">Score Tally</a>
         <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick=SeedData>Seed data</button>
     </div>
@@ -42,6 +44,9 @@
 
         var houses = Seed.GetHousesSchoolEvents();
         File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(houses));
+
+        var spirit = Seed.GetSpirit();
+        File.WriteAllText("ScoreCards/Spirit.json", JsonSerializer.Serialize(spirit));
 
         NavigationManager.NavigateTo("/");
     }

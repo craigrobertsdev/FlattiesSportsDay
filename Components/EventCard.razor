@@ -57,11 +57,7 @@
     public bool Disabled { get; set; }
 
     public List<int> AthleticScores = [10, 20, 30, 40];
-    public List<int> SpiritScores = [-10, 0, 10, 20, 30, 40];
-
-    protected override void OnInitialized() {
-        base.OnInitialized();
-    }
+    public List<int> SpiritScores = [0, 10, 20, 30, 40];
 
     public void SaveScores() {
         error = false;
@@ -87,12 +83,12 @@
     }
 
     public void HandleAthleticScoreChange(ChangeEventArgs e, string houseName) {
-        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).AthleticScore = Int32.Parse((string)e.Value)!;
+        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).AthleticScore = Int32.Parse((string)e.Value!);
         StateHasChanged();
     }
 
     public void HandleSpiritScoreChange(ChangeEventArgs e, string houseName) {
-        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).SpiritScore = Int32.Parse((string)e.Value)!;
+        Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).SpiritScore = Int32.Parse((string)e.Value!);
         StateHasChanged();
     }
 

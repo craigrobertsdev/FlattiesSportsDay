@@ -2,9 +2,10 @@
 @using SportsDayScoring.Models
 @using System.Text.Json
 
-<div class="flex flex-col w-[250px]">
-    @* Sturt *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-red-400">
+<div class="p-2 w-full">
+    <div class="flex flex-col gap-2">
+        @* Sturt *@
+        <div class="grid grid-rows-2 grid-cols-2 bg-red-400 py-4">
             <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Sturt</p>
             <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
                 <p class="font-bold">Athletic Score</p>
@@ -15,8 +16,8 @@
                 @Sturt.SpiritScore
             </div>
         </div>
-    @* Wickham *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-blue-400">
+        @* Wickham *@
+        <div class="grid grid-rows-2 grid-cols-2 bg-blue-400 py-4">
             <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Wickham</p>
             <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
                 <p class="font-bold">Athletic Score</p>
@@ -27,8 +28,8 @@
                 @Wickham.SpiritScore
             </div>
         </div>
-    @* Elliott *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-green-400">
+        @* Elliott *@
+        <div class="grid grid-rows-2 grid-cols-2 bg-green-400 py-4">
             <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Elliott</p>
             <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
                 <p class="font-bold">Athletic Score</p>
@@ -39,8 +40,8 @@
                 @Elliott.SpiritScore
             </div>
         </div>
-    @* Leslie *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-yellow-400">
+        @* Leslie *@
+        <div class="grid grid-rows-2 grid-cols-2 bg-yellow-400 py-4">
             <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Leslie</p>
             <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
                 <p class="font-bold">Athletic Score</p>
@@ -51,6 +52,7 @@
                 @Leslie.SpiritScore
             </div>
         </div>
+    </div>
 </div>
 
 @code {
@@ -65,12 +67,12 @@
     List<House> Houses = [];
 
     protected override void OnInitialized() {
-        var wholeSchoolScores = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
         List<Class> rooms = [];
         @foreach (var room in RoomNumbers) {
             var classScores = JsonSerializer.Deserialize<Class>(File.ReadAllText($"ScoreCards/Room{room}.json"));
             rooms.Add(classScores!);
         }
+
         foreach (var room in rooms) {
             foreach (var house in room.Houses) {
                 Houses.Add(house);
@@ -95,7 +97,8 @@
             }
         }
 
-        foreach (var house in wholeSchoolScores) {
+        var wholeSchoolScores = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
+        foreach (var house in wholeSchoolScores!) {
             switch (house.Name) {
                 case "Sturt":
                     Sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
@@ -112,6 +115,24 @@
                 case "Leslie":
                     Leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
                     Leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+                    break;
+            }
+        }
+
+        var spiritScores = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
+        foreach (var house in spiritScores!) {
+            switch (house.Name) {
+                case "Sturt":
+                    Sturt.SpiritScore += house.SpiritScore;
+                    break;
+                case "Wickham":
+                    Wickham.SpiritScore += house.SpiritScore;
+                    break;
+                case "Elliott":
+                    Elliott.SpiritScore += house.SpiritScore;
+                    break;
+                case "Leslie":
+                    Leslie.SpiritScore += house.SpiritScore;
                     break;
             }
         }

@@ -94,4 +94,16 @@ public static class Seed {
 
         return houses;
     }
+
+    public static List<HouseSpirit> GetSpirit() {
+        List<HouseSpirit> houses = [];
+        foreach (var houseName in HouseNames) {
+            houses.Add(new HouseSpirit {
+                Name = houseName,
+                SpiritScore = 0
+            });
+        }
+
+        return houses;
+    }
 }

@@ -1,0 +1,45 @@
+@page "/spirit"
+@using SportsDayScoring.Models
+@using System.Text.Json
+
+@inject NavigationManager NavigationManager
+
+<div class="flex flex-col gap-2 justify-center items-center">
+    <h1 class="text-lg font-bold">Add Spirit Points</h1>
+    <div class="w-[300px] m-auto flex flex-col justify-center items-center gap-2">
+        @for (int i = 0; i < 4; i++) {
+            var idx = i;
+            <select class="w-full font-bold text-center @HouseColours[idx] p-1" @onchange=@((e) => HandleSpiritScoreChange(e, HouseNames[idx]))>
+                @foreach (var score in SpiritScores) {
+                    <option value="@score">@score</option>
+                }
+            </select>
+        }
+        <button class="bg-green-600 font-bold p-2 w-full" @onclick=SaveScores>Save Scores</button>
+        <a href="/" class="bg-orange-600 font-bold p-2 w-full text-center">Return home</a>
+    </div>
+</div>
+
+@code {
+    public string[] HouseColours = ["bg-red-400", "bg-blue-400", "bg-green-400", "bg-yellow-400"];
+    public string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
+    public List<int> SpiritScores = [0, 10, 20, 30, 40];
+    public List<HouseSpirit> Houses { get; set; } = [];
+
+    protected override void OnInitialized() {
+        var houses = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
+        Houses = houses!;
+    }
+
+    public void HandleSpiritScoreChange(ChangeEventArgs e, string houseName) {
+        Houses.First(h => h.Name == houseName).SpiritScore += Int32.Parse((string)e.Value!);
+        StateHasChanged();
+    }
+
+    public void SaveScores() {
+        var filePath = "ScoreCards/Spirit.json";
+        File.WriteAllText(filePath, JsonSerializer.Serialize(Houses));
+
+        NavigationManager.NavigateTo("/");
+    }
+}
