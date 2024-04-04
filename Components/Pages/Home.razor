@@ -17,11 +17,11 @@
                     <option value="@room">Room @room</option>
                 }
             </select>
-            <button @onclick=NavigateToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Go to Class Events</button>
+            <button @onclick=GoToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Go to Class Events</button>
         </div>
-        <a class="border rounded-md text-center text-lg p-3 bg-blue-400" href="/school-events">Whole School Events</a>
-        <a class="border rounded-md text-center text-lg p-3 bg-yellow-400" href="/spirit">Add Spirit Points</a>
-        <a class="border rounded-md text-center text-lg p-3 bg-green-400" href="/scores">Score Tally</a>
+        <button class="border rounded-md text-center text-lg p-3 bg-blue-400" @onclick=GoToSchoolEvents>Whole School Events</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick=GoToSpirit>Add Spirit Points</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-green-400" @onclick=GoToScores>Score Tally</button>
         <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick=SeedData>Seed data</button>
     </div>
 </div>
@@ -30,7 +30,7 @@
     public List<int> Rooms { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
     public int? SelectedRoom { get; set; } = null;
 
-    public void NavigateToClassEvents() {
+    public void GoToClassEvents() {
         NavigationManager.NavigateTo($"/class-events/{SelectedRoom}");
     }
 
@@ -50,4 +50,16 @@
 
         NavigationManager.NavigateTo("/");
     }
+
+    public void GoToSchoolEvents() {
+        NavigationManager.NavigateTo("/school-events");
+    }
+    
+    public void GoToSpirit() {
+        NavigationManager.NavigateTo("/spirit");
+    }
+
+    public void GoToScores() {
+        NavigationManager.NavigateTo("/scores");
+    }   
 }

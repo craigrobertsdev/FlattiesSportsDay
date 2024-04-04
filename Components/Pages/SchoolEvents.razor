@@ -60,7 +60,7 @@
 
     }
     <button class="@(error ? "bg-red-600" : "bg-green-600") font-bold p-2 w-full" @onclick=SaveScores>Save Scores</button>
-    <div class="w-full p-2 bg-orange-600 text-center">
+    <div class="w-full p-2 bg-sky-200 text-center">
         <a class="font-bold" href="/">Return Home</a>
     </div>
 </div>
@@ -84,7 +84,8 @@
     }
 
     public void SaveScores() {
-        if (SelectedEvent is null || FourtyPoints is null || ThirtyPoints is null || TwentyPoints is null) {
+        if (SelectedEvent is null || FourtyPoints is null || ThirtyPoints is null || TwentyPoints is null 
+            || (SelectedEvent == "Tug of War" && TenPoints is null)) {
             error = true;
             return;
         }
@@ -100,7 +101,7 @@
             Houses.First(h => h.Name == FourtyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 40;
             Houses.First(h => h.Name == ThirtyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 30;
             Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 20;
-            Houses.First(h => h.Name == TwentyPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 10;
+            Houses.First(h => h.Name == TenPoints).Events.First(e => e.Name == SelectedEvent).SpiritScore += 10;
         }
 
         File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(Houses));

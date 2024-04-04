@@ -10,6 +10,7 @@
         @for (int i = 0; i < 4; i++) {
             var idx = i;
             <select class="w-full font-bold text-center @HouseColours[idx] p-1" @onchange=@((e) => HandleSpiritScoreChange(e, HouseNames[idx]))>
+                <option selected hidden disabled>@HouseNames[idx]</option>
                 @foreach (var score in SpiritScores) {
                     <option value="@score">@score</option>
                 }
