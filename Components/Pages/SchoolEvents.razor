@@ -60,9 +60,7 @@
 
     }
     <button class="@(error ? "bg-red-600" : "bg-green-600") font-bold p-2 w-full" @onclick=SaveScores>Save Scores</button>
-    <div class="w-full p-2 bg-sky-200 text-center">
-        <a class="font-bold" href="/">Return Home</a>
-    </div>
+    <a href="/" class="bg-sky-200 font-bold p-2 w-full text-center">Return Home</a>
 </div>
 
 @code {
@@ -84,8 +82,8 @@
     }
 
     public void SaveScores() {
-        if (SelectedEvent is null || FourtyPoints is null || ThirtyPoints is null || TwentyPoints is null 
-            || (SelectedEvent == "Tug of War" && TenPoints is null)) {
+        if (SelectedEvent is null || FourtyPoints is null || ThirtyPoints is null || TwentyPoints is null
+            || (SelectedEvent == "Tug of War" && TenPoints is null) || (SelectedEvent == "Team Chants" && TenPoints is null)) {
             error = true;
             return;
         }
