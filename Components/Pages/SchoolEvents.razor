@@ -5,7 +5,7 @@
 
 <div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
     <div class="flex gap-4 w-full items-center justify-center m-2">
-        <select @bind=SelectedEvent class="border border-black bg-gray-300 font-bold text-center p-2">
+        <select @bind=SelectedEvent class="border border-black bg-slate-200 font-bold text-center p-2 w-full">
             <option disabled selected hidden>Select Event</option>
             @foreach (var ev in Events) {
                 <option value="@ev">@ev</option>
