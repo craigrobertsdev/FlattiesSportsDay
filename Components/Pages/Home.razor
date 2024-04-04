@@ -17,10 +17,10 @@
                     <option value="@room">Room @room</option>
                 }
             </select>
-            <button @onclick=GoToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Go to Class Events</button>
+            <button @onclick=GoToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Class Events</button>
         </div>
         <button class="border rounded-md text-center text-lg p-3 bg-blue-400" @onclick=GoToSchoolEvents>Whole School Events</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick=GoToSpirit>Add Spirit Points</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick=GoToSpirit>Spirit Points</button>
         <button class="border rounded-md text-center text-lg p-3 bg-green-400" @onclick=GoToScores>Score Tally</button>
         <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick=SeedData>Seed data</button>
     </div>
