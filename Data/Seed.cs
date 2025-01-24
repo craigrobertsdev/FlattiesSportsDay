@@ -2,48 +2,63 @@
 
 namespace SportsDayScoring.Data;
 
-public static class Seed {
-    public static List<string> HouseNames { get; set; } = ["Sturt", "Wickham", "Elliott", "Leslie"];
-    public static List<string> ClassEvents { get; set; } = ["Long Jump", "Gaga Ball", "Bombardment", "Marathon", "Hurdles", "Nerf Javelin", "Spoke Relay", "Shot Put"];
-    public static List<string> SchoolEvents { get; set; } = ["Sprints", "House 100m Baton Relay", "Whole School Ribbon Relay", "Tug of War", "Team Chants"];
+public class Seed {
+    private readonly ApplicationDbContext _context;
+
+    public Seed(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task SeedData()
+    {
+        var schoolEvents = GetSchoolEvents();
+
+        _context.Rooms.AddRange(Rooms);
+        await _context.SaveChangesAsync();
+        
+    }
+    private static List<string> HouseNames { get; set; } = ["Sturt", "Wickham", "Elliott", "Leslie"];
+    private static List<string> ClassEvents { get; set; } = ["Long Jump", "Gaga Ball", "Bombardment", "Marathon", "Hurdles", "Nerf Javelin", "Spoke Relay", "Shot Put"];
+    private static List<string> SchoolEvents { get; set; } = ["Sprints", "House 100m Baton Relay", "Whole School Ribbon Relay", "Tug of War", "Team Chants"];
 
     public static List<int> RoomNumbers { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
-    public static List<Class> Rooms = [
-        new Class {
+    public static List<Room> Rooms = [
+        new Room {
             RoomNumber = 5,
             Houses = GetHousesClassEvents(7)
             },
-        new Class {
+        new Room {
             RoomNumber = 6,
             Houses = GetHousesClassEvents(0),
             },
-        new Class {
+        new Room {
             RoomNumber = 7,
             Houses = GetHousesClassEvents(5)
             },
-        new Class {
+        new Room {
             RoomNumber = 8,
             Houses = GetHousesClassEvents(6),
         },
-        new Class {
+        new Room {
             RoomNumber = 12,
             Houses = GetHousesClassEvents(1),
         },
-        new Class {
+        new Room {
             RoomNumber = 13,
             Houses = GetHousesClassEvents(2),
         },
-        new Class {
+        new Room {
             RoomNumber = 14,
             Houses = GetHousesClassEvents(3),
         },
-        new Class {
+        new Room {
             RoomNumber = 15,
             Houses = GetHousesClassEvents(4),
         }
         ];
 
-    public static List<Event> GetClassEvents(int offset) {
+    private static List<Event> GetClassEvents(int offset) {
         List<Event> events = [];
         var idx = offset;
         while (events.Count < ClassEvents.Count) {

@@ -1,7 +1,5 @@
 @page "/"
 @using SportsDayScoring.Data
-@using SportsDayScoring.Models
-@using System.Text.Json
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 
@@ -11,55 +9,46 @@
     <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day 2024</h1>
     <div class="flex flex-col gap-4">
         <div>
-            <select @bind=SelectedRoom class="border border-black bg-slate-200 p-2">
+            <select @bind="SelectedRoom" class="border border-black bg-slate-200 p-2">
                 <option selected disabled hidden>Select a room</option>
                 @foreach (var room in Rooms) {
                     <option value="@room">Room @room</option>
                 }
             </select>
-            <button @onclick=GoToClassEvents disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Class Events</button>
+            <button @onclick="GoToClassEvents" disabled="@(SelectedRoom == null)" class="border p-2 text-lg @(SelectedRoom == null ? "bg-gray-500" : "bg-red-400")">Class Events</button>
         </div>
-        <button class="border rounded-md text-center text-lg p-3 bg-blue-400" @onclick=GoToSchoolEvents>Whole School Events</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick=GoToSpirit>Spirit Points</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-green-400" @onclick=GoToScores>Score Tally</button>
-        @* <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick=SeedData>Reset data - do not touch</button> *@
+        <button class="border rounded-md text-center text-lg p-3 bg-blue-400" @onclick="GoToSchoolEvents">Whole School Events</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick="GoToSpirit">Spirit Points</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-green-400" @onclick="GoToScores">Score Tally</button>
+        <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick="SeedData">Reset data - do not touch</button>
     </div>
 </div>
 
 @code {
-    public List<int> Rooms { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
-    public int? SelectedRoom { get; set; } = null;
+    [Inject] ApplicationDbContext Context { get; set; } = null!;
+    List<int> Rooms { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
+    int? SelectedRoom { get; set; } = null;
 
-    public void GoToClassEvents() {
+    void GoToClassEvents() {
         NavigationManager.NavigateTo($"/class-events/{SelectedRoom}");
     }
 
-    public void SeedData() {
-        var rooms = Seed.Rooms;
-
-        foreach (var room in rooms) {
-            var filePath = $"ScoreCards/Room{room.RoomNumber}.json";
-            File.WriteAllText(filePath, JsonSerializer.Serialize(room));
-        }
-
-        var houses = Seed.GetHousesSchoolEvents();
-        File.WriteAllText("ScoreCards/SchoolEvents.json", JsonSerializer.Serialize(houses));
-
-        var spirit = Seed.GetSpirit();
-        File.WriteAllText("ScoreCards/Spirit.json", JsonSerializer.Serialize(spirit));
-
-        NavigationManager.NavigateTo("/");
+    private async Task SeedData() {
+        var seed = new Seed(Context);
+        await seed.SeedData();
+        
+        // NavigationManager.NavigateTo("/");
     }
 
-    public void GoToSchoolEvents() {
+    private void GoToSchoolEvents() {
         NavigationManager.NavigateTo("/school-events");
     }
     
-    public void GoToSpirit() {
+    private void GoToSpirit() {
         NavigationManager.NavigateTo("/spirit");
     }
 
-    public void GoToScores() {
+    private void GoToScores() {
         NavigationManager.NavigateTo("/scores");
     }   
 }

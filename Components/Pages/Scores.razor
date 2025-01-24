@@ -72,9 +72,9 @@
     List<House> Houses = [];
 
     protected override void OnInitialized() {
-        List<Class> rooms = [];
+        List<Room> rooms = [];
         @foreach (var room in RoomNumbers) {
-            var classScores = JsonSerializer.Deserialize<Class>(File.ReadAllText($"ScoreCards/Room{room}.json"));
+            var classScores = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{room}.json"));
             rooms.Add(classScores!);
         }
 

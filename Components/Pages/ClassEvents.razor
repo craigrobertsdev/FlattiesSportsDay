@@ -11,29 +11,36 @@
         <a href="/">Return Home</a>
     </span>
 </h1>
-@if (Error != null) {
+@if (Error != null)
+{
     <div class="text-red-600">@Error</div>
 }
 <div class="overflow-x-auto my-2">
-    @if (Houses.Count == 0) {
+    @if (Houses.Count == 0)
+    {
         <p>Loading...</p>
     }
-    else {
-        @foreach (var ev in Houses.First().Events) {
-            <EventCard EventName="@ev.Name" Parent="this" />
+    else
+    {
+        @foreach (var ev in Houses.First().Events)
+        {
+            <EventCard EventName="@ev.Name" Parent="this"/>
         }
     }
 </div>
 
 @code {
-    [Parameter]
-    public int RoomNumber { get; set; }
+    [Parameter] public int RoomNumber { get; set; }
+    [Inject] public DataService DataService { get; set; }
 
     public List<House> Houses { get; set; } = [];
     public string? Error = null;
 
-    protected override void OnInitialized() {
-        var rooms = JsonSerializer.Deserialize<Class>(File.ReadAllText($"ScoreCards/Room{RoomNumber}.json"));
-        Houses = rooms!.Houses;
+    protected override async Task OnInitializedAsync()
+    {
+        var houses = await DataService.GetHousesAsync(RoomNumber);
+        var rooms = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{RoomNumber}.json"));
+        Houses = houses;
     }
+
 }

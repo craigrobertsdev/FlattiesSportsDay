@@ -1,4 +1,6 @@
+using Microsoft.EntityFrameworkCore;
 using SportsDayScoring.Components;
+using SportsDayScoring.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlite("Data Source=SportsDayScoring.db");
+});
+
+builder.Services.AddTransient<DataService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
