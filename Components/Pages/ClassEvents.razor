@@ -11,9 +11,9 @@
         <a href="/">Return Home</a>
     </span>
 </h1>
-@if (Error != null)
+@if (_error != null)
 {
-    <div class="text-red-600">@Error</div>
+    <div class="text-red-600">@_error</div>
 }
 <div class="overflow-x-auto my-2">
     @if (Houses.Count == 0)
@@ -31,16 +31,22 @@
 
 @code {
     [Parameter] public int RoomNumber { get; set; }
-    [Inject] public DataService DataService { get; set; }
+    [Inject] public DataService DataService { get; set; } = null!;
 
     public List<House> Houses { get; set; } = [];
-    public string? Error = null;
+    private string? _error;
 
     protected override async Task OnInitializedAsync()
     {
-        var houses = await DataService.GetHousesAsync(RoomNumber);
-        var rooms = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{RoomNumber}.json"));
-        Houses = houses;
+        try
+        {
+            var houses = await DataService.GetHousesAsync(RoomNumber);
+            Houses = houses;
+        }
+        catch (Exception e)
+        {
+            _error = e.Message;
+        }
     }
 
 }
