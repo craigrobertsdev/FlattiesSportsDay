@@ -77,7 +77,7 @@
 
 @code {
     [Parameter] public DataService DataService { get; set; }
-    private List<HouseScoreCard> _scoreCards = [];
+    private List<ScoreCard> _scoreCards = [];
     private (int AthleticScore, int SpiritScore) _sturt = (0, 0);
     private (int AthleticScore, int SpiritScore) _wickham = (0, 0);
     private (int AthleticScore, int SpiritScore) _elliott = (0, 0);
@@ -87,86 +87,6 @@
     {
         _scoreCards = await DataService.GetHousesWithAggregatedScores();
     }
-
-    // protected override void OnInitialized()
-    // {
-    //     List<Room> rooms = [];
-    //     foreach (var room in AppConstants.RoomNumbers)
-    //     {
-    //         var classScores = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{room}.json"));
-    //         rooms.Add(classScores!);
-    //     }
-    //
-    //     foreach (var room in rooms)
-    //     {
-    //         foreach (var house in room.Houses)
-    //         {
-    //             switch (house.Name)
-    //             {
-    //                 case "Sturt":
-    //                     _sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                     _sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                     break;
-    //                 case "Wickham":
-    //                     _wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                     _wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                     break;
-    //                 case "Elliott":
-    //                     _elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                     _elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                     break;
-    //                 case "Leslie":
-    //                     _leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                     _leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                     break;
-    //             }
-    //         }
-    //     }
-    //
-    //     var wholeSchoolScores = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
-    //     foreach (var house in wholeSchoolScores!)
-    //     {
-    //         switch (house.Name)
-    //         {
-    //             case "Sturt":
-    //                 _sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                 _sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                 break;
-    //             case "Wickham":
-    //                 _wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                 _wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                 break;
-    //             case "Elliott":
-    //                 _elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                 _elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                 break;
-    //             case "Leslie":
-    //                 _leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-    //                 _leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-    //                 break;
-    //         }
-    //     }
-    //
-    //     var spiritScores = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
-    //     foreach (var house in spiritScores!)
-    //     {
-    //         switch (house.Name)
-    //         {
-    //             case "Sturt":
-    //                 _sturt.SpiritScore += house.SpiritScore;
-    //                 break;
-    //             case "Wickham":
-    //                 _wickham.SpiritScore += house.SpiritScore;
-    //                 break;
-    //             case "Elliott":
-    //                 _elliott.SpiritScore += house.SpiritScore;
-    //                 break;
-    //             case "Leslie":
-    //                 _leslie.SpiritScore += house.SpiritScore;
-    //                 break;
-    //         }
-    //     }
-    // }
 
     private void GoHome()
     {

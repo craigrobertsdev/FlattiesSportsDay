@@ -1,13 +1,7 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-
-namespace SportsDayScoring;
+﻿namespace SportsDayScoring;
 
 public static class AppConstants
 {
-    static AppConstants()
-    {
-    }
-
     public static readonly int[] RoomNumbers = [5, 6, 7, 8, 12, 13, 14, 15];
 
     public static readonly string[] ClassEvents =
@@ -22,18 +16,8 @@ public static class AppConstants
     public static readonly string[] HouseBackgroundColours =
         ["bg-red-400", "bg-blue-400", "bg-green-400", "bg-yellow-400"];
 
-    // public static readonly string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
-    
     public static HouseName[] HouseNames = (HouseName[])Enum.GetValues(typeof(HouseName));
 
     public static readonly int[] AthleticScores = [10, 20, 30, 40];
     public static readonly int[] SpiritScores = [0, 10, 20, 30, 40];
-}
-
-public enum HouseName
-{
-    Sturt,
-    Wickham,
-    Elliott,
-    Leslie,
 }

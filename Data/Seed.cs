@@ -1,4 +1,5 @@
-﻿using SportsDayScoring.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SportsDayScoring.Models;
 
 namespace SportsDayScoring.Data;
 
@@ -13,16 +14,13 @@ public class Seed(ApplicationDbContext context)
             await context.Database.EnsureCreatedAsync();
 
             var houses = GenerateHouses();
-            // context.AddRange(houses);
-            // await context.SaveChangesAsync();
-            //
-            // var savedHouses = context.Houses.ToList();
-            //
             var rooms = GenerateRooms(houses);
+            
             context.Rooms.AddRange(rooms);
             await context.SaveChangesAsync();
 
-            var events = GenerateEvents(houses, rooms);
+            var roomsWithIds = await context.Rooms.ToListAsync();
+            var events = GenerateEvents(roomsWithIds);
 
             context.Events.AddRange(events);
             await context.SaveChangesAsync();
@@ -54,65 +52,54 @@ public class Seed(ApplicationDbContext context)
             new Room
             {
                 RoomNumber = 5,
-                Houses = houses,
-                EventOffset = 7
+                EventOrderOffset = 7
             },
             new Room
             {
                 RoomNumber = 6,
-                Houses = houses,
-                EventOffset = 0
+                EventOrderOffset = 0
             },
             new Room
             {
                 RoomNumber = 7,
-                Houses = houses,
-                EventOffset = 5
+                EventOrderOffset = 5
             },
             new Room
             {
                 RoomNumber = 8,
-                Houses = houses,
-                EventOffset = 6
+                EventOrderOffset = 6
             },
             new Room
             {
                 RoomNumber = 12,
-                Houses = houses,
-                EventOffset = 1,
+                EventOrderOffset = 1,
             },
             new Room
             {
                 RoomNumber = 13,
-                Houses = houses,
-                EventOffset = 2,
+                EventOrderOffset = 2,
             },
             new Room
             {
                 RoomNumber = 14,
-                Houses = houses,
-                EventOffset = 3,
+                EventOrderOffset = 3,
             },
             new Room
             {
                 RoomNumber = 15,
-                Houses = houses,
-                EventOffset = 4,
+                EventOrderOffset = 4,
             }
         ];
     }
 
-    private List<Event> GenerateEvents(List<House> houses, List<Room> rooms)
+    private List<Event> GenerateEvents(List<Room> rooms)
     {
         var events = new List<Event>();
         foreach (var room in rooms)
         {
-            foreach (var house in houses)
+            for (int i = 0; i < AppConstants.ClassEvents.Length; i++)
             {
-                foreach (var eventName in AppConstants.ClassEvents)
-                {
-                    events.Add(new(eventName, room.Id, house.Id));
-                }
+                events.Add(new(AppConstants.ClassEvents[i], room, i));
             }
         }
 

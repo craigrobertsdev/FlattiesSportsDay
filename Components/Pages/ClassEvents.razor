@@ -1,9 +1,6 @@
 @page "/class-events/{roomNumber:int}"
-@using Microsoft.EntityFrameworkCore
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
-@using System.Text.Json
-@inject NavigationManager NavManager
 
 <h1 class="text-xl text-center font-bold px-4 items-center relative">
     Room @RoomNumber
@@ -16,15 +13,15 @@
     <div class="text-red-600">@_error</div>
 }
 <div class="overflow-x-auto my-2">
-    @if (Houses.Count == 0)
+    @if (Room is null)
     {
         <p>Loading...</p>
     }
     else
     {
-        @foreach (var ev in Houses.First().Events)
+        @foreach (var ev in Room.Events)
         {
-            <EventCard EventName="@ev.Name" Parent="this"/>
+            <EventCard Event="@ev" Parent="this"/>
         }
     }
 </div>
@@ -33,15 +30,15 @@
     [Parameter] public int RoomNumber { get; set; }
     [Inject] public DataService DataService { get; set; } = null!;
 
-    public List<House> Houses { get; set; } = [];
+    private Room? Room { get; set; }
     private string? _error;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var houses = await DataService.GetHousesAsync(RoomNumber);
-            Houses = houses;
+            var room = await DataService.GetRoom(RoomNumber);
+            Room = room;
         }
         catch (Exception e)
         {

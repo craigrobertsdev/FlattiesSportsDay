@@ -1,12 +1,11 @@
 @page "/school-events"
 @using SportsDayScoring.Models
-@using System.Text.Json
 @using SportsDayScoring.Data
 @inject NavigationManager NavigationManager
 
 <div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
     <div class="flex gap-4 w-full items-center justify-center m-2">
-        <select @bind=SelectedEvent class="border border-black bg-slate-200 font-bold text-center p-2 w-full">
+        <select @bind="SelectedEvent" class="border border-black bg-slate-200 font-bold text-center p-2 w-full">
             <option disabled selected hidden>Select Event</option>
             @foreach (var ev in AppConstants.SchoolEvents)
             {
@@ -16,7 +15,7 @@
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">40 points</p>
-        <select @bind=FortyPoints class="font-bold border border-black p-2">
+        <select @bind="FortyPoints" class="font-bold border border-black p-2">
             <option disabled selected hidden></option>
             @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
             {
@@ -28,7 +27,7 @@
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">30 points</p>
-        <select @bind=ThirtyPoints class="font-bold border border-black p-2">
+        <select @bind="ThirtyPoints" class="font-bold border border-black p-2">
             <option disabled selected hidden></option>
             @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
             {
@@ -40,7 +39,7 @@
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">20 points</p>
-        <select @bind=TwentyPoints class="font-bold border border-black p-2">
+        <select @bind="TwentyPoints" class="font-bold border border-black p-2">
             <option disabled selected hidden></option>
             @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
             {
@@ -75,7 +74,7 @@
     [Parameter] public DataService DataService { get; set; }
     private bool _error;
     private string? SelectedEvent { get; set; }
-    private readonly List<HouseScoreCard> _eventScores = [];
+    private readonly List<ScoreCard> _eventScores = [];
 
     private HouseName? FortyPoints { get; set; }
     private HouseName? ThirtyPoints { get; set; }
@@ -86,7 +85,7 @@
     {
         foreach (var houseName in AppConstants.HouseNames)
         {
-            _eventScores.Add(new HouseScoreCard(houseName));
+            _eventScores.Add(new ScoreCard(houseName));
         }
     }
 
@@ -101,20 +100,20 @@
 
         if (SelectedEvent != "Team Chants") // Team chants only gets spirit score
         {
-            _eventScores.First(e => e.HouseName == FortyPoints).AthleticPoints += 40;
-            _eventScores.First(e => e.HouseName == ThirtyPoints).AthleticPoints += 30;
-            _eventScores.First(e => e.HouseName == TwentyPoints).AthleticPoints += 20;
+            _eventScores.First(sc => sc.HouseName == FortyPoints).AthleticPoints += 40;
+            _eventScores.First(sc => sc.HouseName == ThirtyPoints).AthleticPoints += 30;
+            _eventScores.First(sc => sc.HouseName == TwentyPoints).AthleticPoints += 20;
             if (SelectedEvent == "Tug of War")
             {
-            _eventScores.First(e => e.HouseName == TenPoints).AthleticPoints += 10;
+                _eventScores.First(sc => sc.HouseName == TenPoints).AthleticPoints += 10;
             }
         }
         else
         {
-            _eventScores.First(h => h.HouseName == FortyPoints).SpiritPoints += 40;
-            _eventScores.First(h => h.HouseName == ThirtyPoints).SpiritPoints += 30;
-            _eventScores.First(h => h.HouseName == TwentyPoints).SpiritPoints += 20;
-            _eventScores.First(h => h.HouseName == TenPoints).SpiritPoints += 10;
+            _eventScores.First(sc => sc.HouseName == FortyPoints).SpiritPoints += 40;
+            _eventScores.First(sc => sc.HouseName == ThirtyPoints).SpiritPoints += 30;
+            _eventScores.First(sc => sc.HouseName == TwentyPoints).SpiritPoints += 20;
+            _eventScores.First(sc => sc.HouseName == TenPoints).SpiritPoints += 10;
         }
 
         await DataService.UpdateWholeSchoolEventScores(SelectedEvent, _eventScores);

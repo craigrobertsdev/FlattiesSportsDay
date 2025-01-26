@@ -20,27 +20,21 @@ public class ApplicationDbContext : DbContext
             .HasKey(x => x.Id);
 
         modelBuilder.Entity<Room>()
-            .HasMany(r => r.Houses)
-            .WithMany();
-
-        modelBuilder.Entity<Room>()
-            .HasMany<Event>()
-            .WithOne()
-            .HasForeignKey(e => e.RoomId);
+            .HasMany(r => r.Events)
+            .WithOne(e => e.Room);
         
         modelBuilder.Entity<House>()
             .HasKey(x => x.Id);
 
         modelBuilder.Entity<Event>()
-            .HasKey(x => new {x.RoomId, x.HouseId, x.Name});
+            .HasKey(x => x.Id);
 
         modelBuilder.Entity<Event>()
-            .HasOne<Room>()
-            .WithMany()
-            .HasForeignKey(e => e.RoomId);
-
-        modelBuilder.Entity<Event>()
-            .HasOne<House>()
-            .WithMany(h => h.Events);
+            .OwnsMany(e => e.ScoreCards, scb =>
+            {
+                scb.Property<Guid>("Id");
+                scb.HasKey("Id");
+                scb.WithOwner().HasForeignKey("EventId");
+            });
     }
 }

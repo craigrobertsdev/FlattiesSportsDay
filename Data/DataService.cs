@@ -12,88 +12,84 @@ public class DataService
         _context = context;
     }
 
-    public async Task<List<House>> GetHousesAsync(int roomNumber)
-    {
-        var room = await _context.Rooms
-            .Where(r => r.RoomNumber == roomNumber)
-            .Include(r => r.Houses)
-            .ThenInclude(h => h.Events)
-            .FirstOrDefaultAsync();
-
-        if (room is null)
-        {
-            throw new Exception("Room not found");
-        }
-
-        return room.Houses;
-    }
-
-    public async Task UpdateRoomScores(Room newRoom)
-    {
-        var room = await _context.Rooms
-            .Where(r => r.RoomNumber == newRoom.RoomNumber)
-            .Include(r => r.Houses)
-            .ThenInclude(h => h.Events)
-            .FirstOrDefaultAsync();
-        
-        if (room is null)
-        {
-            throw new Exception("Room not found");
-        }
-
-        foreach (var house in newRoom.Houses)
-        {
-            room.Houses = newRoom.Houses;
-        }
-        
-        _context.Rooms.Update(room);
-        await _context.SaveChangesAsync();
-    }
-
-    public async Task<List<House>> GetHousesWithSchoolEvents()
-    {
-        return await _context.Houses
-            .Include(h => h.Events)
-            .ToListAsync();
-    }
-
-    public async Task UpdateWholeSchoolEventScores(string eventName, List<HouseScoreCard> scoresCards)
+    public async Task UpdateWholeSchoolEventScores(string eventName, List<ScoreCard> scoreCards)
     {
         var houses = await _context.Houses
             .ToListAsync();
 
-        foreach (var scoreCard in scoresCards)
+        foreach (var scoreCard in scoreCards)
         {
             houses.First(h => h.Name == scoreCard.HouseName).SchoolEventAthleticScore += scoreCard.AthleticPoints;
             houses.First(h => h.Name == scoreCard.HouseName).SchoolEventSpiritScore += scoreCard.SpiritPoints;
         }
-        
+
         await _context.SaveChangesAsync();
     }
 
-    public async Task<List<HouseScoreCard>> GetHousesWithAggregatedScores()
+    public async Task<List<ScoreCard>> GetHousesWithAggregatedScores()
     {
         var houses = await _context.Houses
-            .Include(h => h.Events)
             .ToListAsync();
-        
-        var scoreCards = new List<HouseScoreCard>();
+
+        var events = await _context.Events
+            .Include(e => e.ScoreCards)
+            .ToListAsync();
+
+        var scoreCards = new List<ScoreCard>();
+
         foreach (var house in houses)
         {
-            var scoreCard = new HouseScoreCard(house.Name);
-
-            foreach (var houseEvent in house.Events)
-            {
-                scoreCard.AthleticPoints += houseEvent.AthleticScore;
-                scoreCard.SpiritPoints += houseEvent.SpiritScore;
-            }
-
+            var scoreCard = new ScoreCard(house.Name);
             scoreCard.AthleticPoints += house.SchoolEventAthleticScore;
             scoreCard.SpiritPoints += house.SchoolEventSpiritScore;
-            
+
+            foreach (var houseEvent in events)
+            {
+                foreach (var sc in houseEvent.ScoreCards)
+                {
+                    scoreCards.Get(sc.HouseName).AthleticPoints += sc.AthleticPoints;
+                    scoreCards.Get(sc.HouseName).SpiritPoints += sc.SpiritPoints;
+                }
+            }
+
+
             scoreCards.Add(scoreCard);
         }
-        
+
         return scoreCards;
+    }
+
+    public async Task<Room> GetRoom(int roomNumber)
+    {
+        var room =  await _context.Rooms
+            .Where(r => r.RoomNumber == roomNumber)
+            .Include(r => r.Events)
+            .FirstAsync();
+        
+        room.Events.Sort((a, b) => a.EventNumber < b.EventNumber ? -1 : 1);
+
+        var events = new List<Event>();
+        var idx = room.EventOrderOffset;
+
+        while (events.Count < room.Events.Count)
+        {
+            if (idx >= room.Events.Count)
+            {
+                idx = 0;
+            }
+            
+            events.Add(room.Events[idx]);
+            idx++;
+        }
+
+        room.Events = events;
+        
+        return room;
+    }
+
+    public async Task UpdateEvent(Event houseEvent)
+    {
+        _context.Events.Update(houseEvent);
+        await _context.SaveChangesAsync();
     }
 }

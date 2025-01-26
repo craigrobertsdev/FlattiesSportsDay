@@ -1,21 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SportsDayScoring.Models;
+﻿namespace SportsDayScoring.Models;
 
 public class Event
 {
-    public Guid RoomId { get; set; }
-    public Guid HouseId { get; set; }
+    public Guid Id { get; set; }
+    public int EventNumber { get; set; }
     public string Name { get; set; }
-    public int AthleticScore { get; set; }
-    public int SpiritScore { get; set; }
+    public List<ScoreCard> ScoreCards { get; set; } = [];
     public bool IsSaved { get; set; }
+    public Room Room { get; set; }
 
-    public Event(string name, Guid roomId, Guid houseId)
+    public Event(string name, Room room, int eventNumber)
     {
-        RoomId = roomId;
-        HouseId = houseId;
         Name = name;
+        EventNumber = eventNumber;
+        Room = room;
+
+        foreach (var houseName in AppConstants.HouseNames)
+        {
+            ScoreCards.Add(new ScoreCard(houseName));
+        }
+    }
+
+    private Event()
+    {
     }
 }

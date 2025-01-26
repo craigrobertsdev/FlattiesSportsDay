@@ -3,6 +3,6 @@
 public class Room {
     public Guid Id { get; set; }
     public int RoomNumber { get; set; }
-    public List<House> Houses { get; set; } = [];
-    public int EventOffset { get; set; }
+    public List<Event> Events { get; set; } = [];
+    public int EventOrderOffset { get; set; }
 }
