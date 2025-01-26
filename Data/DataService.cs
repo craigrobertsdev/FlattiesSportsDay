@@ -49,4 +49,51 @@ public class DataService
         _context.Rooms.Update(room);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<List<House>> GetHousesWithSchoolEvents()
+    {
+        return await _context.Houses
+            .Include(h => h.Events)
+            .ToListAsync();
+    }
+
+    public async Task UpdateWholeSchoolEventScores(string eventName, List<HouseScoreCard> scoresCards)
+    {
+        var houses = await _context.Houses
+            .ToListAsync();
+
+        foreach (var scoreCard in scoresCards)
+        {
+            houses.First(h => h.Name == scoreCard.HouseName).SchoolEventAthleticScore += scoreCard.AthleticPoints;
+            houses.First(h => h.Name == scoreCard.HouseName).SchoolEventSpiritScore += scoreCard.SpiritPoints;
+        }
+        
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<HouseScoreCard>> GetHousesWithAggregatedScores()
+    {
+        var houses = await _context.Houses
+            .Include(h => h.Events)
+            .ToListAsync();
+        
+        var scoreCards = new List<HouseScoreCard>();
+        foreach (var house in houses)
+        {
+            var scoreCard = new HouseScoreCard(house.Name);
+
+            foreach (var houseEvent in house.Events)
+            {
+                scoreCard.AthleticPoints += houseEvent.AthleticScore;
+                scoreCard.SpiritPoints += houseEvent.SpiritScore;
+            }
+
+            scoreCard.AthleticPoints += house.SchoolEventAthleticScore;
+            scoreCard.SpiritPoints += house.SchoolEventSpiritScore;
+            
+            scoreCards.Add(scoreCard);
+        }
+        
+        return scoreCards;
+    }
 }

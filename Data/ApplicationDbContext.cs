@@ -19,28 +19,28 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Room>()
             .HasKey(x => x.Id);
 
-        modelBuilder.Entity<Room>().HasMany<House>()
+        modelBuilder.Entity<Room>()
+            .HasMany(r => r.Houses)
             .WithMany();
-        
-        modelBuilder.Entity<House>()
-            .HasKey(x => x.Id);
-        
-        modelBuilder.Entity<House>()
+
+        modelBuilder.Entity<Room>()
             .HasMany<Event>()
-            .WithMany();
+            .WithOne()
+            .HasForeignKey(e => e.RoomId);
         
-        modelBuilder.Entity<Event>()
+        modelBuilder.Entity<House>()
             .HasKey(x => x.Id);
+
+        modelBuilder.Entity<Event>()
+            .HasKey(x => new {x.RoomId, x.HouseId, x.Name});
+
+        modelBuilder.Entity<Event>()
+            .HasOne<Room>()
+            .WithMany()
+            .HasForeignKey(e => e.RoomId);
+
+        modelBuilder.Entity<Event>()
+            .HasOne<House>()
+            .WithMany(h => h.Events);
     }
-    
 }
-//
-// public class DbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-// {
-//     public ApplicationDbContext CreateDbContext(string[] args)
-//     {
-//         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-//
-//         return new ApplicationDbContext(optionsBuilder.Options);
-//     }
-// }

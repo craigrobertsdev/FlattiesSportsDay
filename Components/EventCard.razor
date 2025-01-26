@@ -14,20 +14,20 @@
         <div class="row-start-1 row-span-2 col-start-@(idx + 2)">
             <div class="row-span-2">
                 @* // For where the event has not been completed yet *@
-                @if (!Parent.Houses.First(h => h.Name == _houseNames[idx]).Events.First(e => e.Name == EventName).IsSaved)
+                @if (!Parent.Houses.First(h => h.Name == AppConstants.HouseNames[idx]).Events.First(e => e.Name == EventName).IsSaved)
                 {
-                    <select class="border-b w-full text-center @_houseColours[idx] p-1"
-                            @onchange=@((e) => HandleAthleticScoreChange(e, _houseNames[idx]))>
+                    <select class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1"
+                            @onchange=@((e) => HandleAthleticScoreChange(e, AppConstants.HouseNames[idx]))>
                         <option disabled hidden selected>Athletic</option>
-                        @foreach (var score in _athleticScores)
+                        @foreach (var score in AppConstants.AthleticScores)
                         {
                             <option value="@score">@score</option>
                         }
                     </select>
-                    <select class="w-full text-center @_houseColours[idx] p-1"
-                            @onchange=@((e) => HandleSpiritScoreChange(e, _houseNames[idx]))>
+                    <select class="w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1"
+                            @onchange=@((e) => HandleSpiritScoreChange(e, AppConstants.HouseNames[idx]))>
                         <option disabled hidden selected>Spirit</option>
-                        @foreach (var score in _spiritScores)
+                        @foreach (var score in AppConstants.SpiritScores)
                         {
                             <option value="@score">@score</option>
                         }
@@ -35,11 +35,11 @@
                 }
                 else
                 {
-                    <div class="border-b w-full text-center @_houseColours[idx] p-1">
-                        @Parent.Houses.First(h => h.Name == _houseNames[idx]).Events.First(e => e.Name == EventName).AthleticScore
+                    <div class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
+                        @Parent.Houses.First(h => h.Name == AppConstants.HouseNames[idx]).Events.First(e => e.Name == EventName).AthleticScore
                     </div>
-                    <div class="w-full text-center @_houseColours[idx] p-1">
-                        @Parent.Houses.First(h => h.Name == _houseNames[idx]).Events.First(e => e.Name == EventName).SpiritScore
+                    <div class="w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
+                        @Parent.Houses.First(h => h.Name == AppConstants.HouseNames[idx]).Events.First(e => e.Name == EventName).SpiritScore
                     </div>
                 }
             </div>
@@ -47,7 +47,7 @@
     }
     @if (EventHasBeenSaved())
     {
-        <div class="flex row-start-1 row-span-2 col-start-6 justify-center items-center font-bold bg-slate-400">Scores saved</div>
+        <div class="flex row-start-1 row-span-2 col-start-6 justify-center items-center font-bold bg-slate-400"></div>
     }
     else
     {
@@ -60,17 +60,10 @@
 </div>
 
 @code {
-    private string[] _houseColours = ["bg-red-400", "bg-blue-400", "bg-green-400", "bg-yellow-400"];
-    private string[] _houseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
-    private List<int> _athleticScores = [10, 20, 30, 40];
-    private List<int> _spiritScores = [0, 10, 20, 30, 40];
-
-    private bool _isError;
-
     [Parameter] public ClassEvents Parent { get; set; } = null!;
     [Parameter] public string EventName { get; set; } = string.Empty;
     [Parameter] public bool Disabled { get; set; }
-
+    private bool _isError;
 
     private async Task SaveScores()
     {
@@ -109,13 +102,13 @@
         return Parent.Houses.Count != 0 && Parent.Houses[0].Events.First(e => e.Name == EventName).IsSaved;
     }
 
-    private void HandleAthleticScoreChange(ChangeEventArgs e, string houseName)
+    private void HandleAthleticScoreChange(ChangeEventArgs e, HouseName houseName)
     {
         Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).AthleticScore = Int32.Parse((string)e.Value!);
         StateHasChanged();
     }
 
-    private void HandleSpiritScoreChange(ChangeEventArgs e, string houseName)
+    private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName)
     {
         Parent.Houses.First(h => h.Name == houseName).Events.First(ev => ev.Name == EventName).SpiritScore = Int32.Parse((string)e.Value!);
         StateHasChanged();

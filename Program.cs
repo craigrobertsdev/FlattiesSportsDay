@@ -11,6 +11,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlite("Data Source=SportsDayScoring.db");
+    options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddTransient<DataService>();

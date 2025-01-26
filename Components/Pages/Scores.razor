@@ -1,149 +1,176 @@
 @page "/scores"
 @using SportsDayScoring.Models
 @using System.Text.Json
+@using SportsDayScoring.Data
 
 @inject NavigationManager NavigationManager
 
 <div class="p-2 w-full">
     <div class="flex flex-col gap-2">
-        @* Sturt *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-red-400 py-4">
-            <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Sturt</p>
-            <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
-                <p class="font-bold">Athletic Score</p>
-                @Sturt.AthleticScore
+        @foreach (var scoreCard in _scoreCards)
+        {
+            <div class="grid grid-rows-2 grid-cols-2 bg-red-400 py-4">
+                <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">@scoreCard.HouseName</p>
+                <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
+                    <p class="font-bold">Athletic Score</p>
+                    @scoreCard.AthleticPoints
+                </div>
+                <div class="row-start-2 col-start-2 flex flex-col justify-center items-center">
+                    <p class="font-bold">Spirit Score</p>
+                    @scoreCard.SpiritPoints
+                </div>
             </div>
-            <div class="row-start-2 col-start-2 flex flex-col justify-center items-center">
-                <p class="font-bold">Spirit Score</p>
-                @Sturt.SpiritScore
-            </div>
-        </div>
-        @* Wickham *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-blue-400 py-4">
-            <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Wickham</p>
-            <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
-                <p class="font-bold">Athletic Score</p>
-                @Wickham.AthleticScore
-            </div>
-            <div class="row-start-2 col-start-2 flex flex-col justify-between items-center">
-                <p class="font-bold">Spirit Score</p>
-                @Wickham.SpiritScore
-            </div>
-        </div>
-        @* Elliott *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-green-400 py-4">
-            <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Elliott</p>
-            <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
-                <p class="font-bold">Athletic Score</p>
-                @Elliott.AthleticScore
-            </div>
-            <div class="row-start-2 col-start-2 flex flex-col justify-between items-center">
-                <p class="font-bold">Spirit Score</p>
-                @Elliott.SpiritScore
-            </div>
-        </div>
-        @* Leslie *@
-        <div class="grid grid-rows-2 grid-cols-2 bg-yellow-400 py-4">
-            <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Leslie</p>
-            <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
-                <p class="font-bold">Athletic Score</p>
-                @Leslie.AthleticScore
-            </div>
-            <div class="row-start-2 col-start-2 flex flex-col justify-between items-center">
-                <p class="font-bold">Spirit Score</p>
-                @Leslie.SpiritScore
-            </div>
-        </div>
+        }
+        @* $1$ Sturt #1# *@
+        @* <div class="grid grid-rows-2 grid-cols-2 bg-red-400 py-4"> *@
+        @*     <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Sturt</p> *@
+        @*     <div class="row-start-2 col-start-1 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Athletic Score</p> *@
+        @*         @_sturt.AthleticScore *@
+        @*     </div> *@
+        @*     <div class="row-start-2 col-start-2 flex flex-col justify-center items-center"> *@
+        @*         <p class="font-bold">Spirit Score</p> *@
+        @*         @_sturt.SpiritScore *@
+        @*     </div> *@
+        @* </div> *@
+        @* $1$ Wickham #1# *@
+        @* <div class="grid grid-rows-2 grid-cols-2 bg-blue-400 py-4"> *@
+        @*     <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Wickham</p> *@
+        @*     <div class="row-start-2 col-start-1 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Athletic Score</p> *@
+        @*         @_wickham.AthleticScore *@
+        @*     </div> *@
+        @*     <div class="row-start-2 col-start-2 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Spirit Score</p> *@
+        @*         @_wickham.SpiritScore *@
+        @*     </div> *@
+        @* </div> *@
+        @* $1$ Elliott #1# *@
+        @* <div class="grid grid-rows-2 grid-cols-2 bg-green-400 py-4"> *@
+        @*     <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Elliott</p> *@
+        @*     <div class="row-start-2 col-start-1 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Athletic Score</p> *@
+        @*         @_elliott.AthleticScore *@
+        @*     </div> *@
+        @*     <div class="row-start-2 col-start-2 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Spirit Score</p> *@
+        @*         @_elliott.SpiritScore *@
+        @*     </div> *@
+        @* </div> *@
+        @* $1$ Leslie #1# *@
+        @* <div class="grid grid-rows-2 grid-cols-2 bg-yellow-400 py-4"> *@
+        @*     <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">Leslie</p> *@
+        @*     <div class="row-start-2 col-start-1 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Athletic Score</p> *@
+        @*         @_leslie.AthleticScore *@
+        @*     </div> *@
+        @*     <div class="row-start-2 col-start-2 flex flex-col justify-between items-center"> *@
+        @*         <p class="font-bold">Spirit Score</p> *@
+        @*         @_leslie.SpiritScore *@
+        @*     </div> *@
+        @* </div> *@
     </div>
 </div>
 <div class="w-full text-right px-2 pb-2">
-    <button class="bg-sky-200 font-bold p-2 mx-auto" @onclick=GoHome>Return Home</button>
+    <button class="bg-sky-200 font-bold p-2 mx-auto" @onclick="GoHome">Return Home</button>
 </div>
 
 @code {
-    public string[] HouseColours = ["bg-red-400", "bg-blue-400", "bg-green-400", "bg-yellow-400"];
-    public string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
-    public static List<int> RoomNumbers { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
-    public (int AthleticScore, int SpiritScore) Sturt = (0, 0);
-    public (int AthleticScore, int SpiritScore) Wickham = (0, 0);
-    public (int AthleticScore, int SpiritScore) Elliott = (0, 0);
-    public (int AthleticScore, int SpiritScore) Leslie = (0, 0);
+    [Parameter] public DataService DataService { get; set; }
+    private List<HouseScoreCard> _scoreCards = [];
+    private (int AthleticScore, int SpiritScore) _sturt = (0, 0);
+    private (int AthleticScore, int SpiritScore) _wickham = (0, 0);
+    private (int AthleticScore, int SpiritScore) _elliott = (0, 0);
+    private (int AthleticScore, int SpiritScore) _leslie = (0, 0);
 
-    List<House> Houses = [];
-
-    protected override void OnInitialized() {
-        List<Room> rooms = [];
-        @foreach (var room in RoomNumbers) {
-            var classScores = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{room}.json"));
-            rooms.Add(classScores!);
-        }
-
-        foreach (var room in rooms) {
-            foreach (var house in room.Houses) {
-                Houses.Add(house);
-                switch (house.Name) {
-                    case "Sturt":
-                        Sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                        Sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                        break;
-                    case "Wickham":
-                        Wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                        Wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                        break;
-                    case "Elliott":
-                        Elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                        Elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                        break;
-                    case "Leslie":
-                        Leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                        Leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                        break;
-                }
-            }
-        }
-
-        var wholeSchoolScores = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
-        foreach (var house in wholeSchoolScores!) {
-            switch (house.Name) {
-                case "Sturt":
-                    Sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                    Sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                    break;
-                case "Wickham":
-                    Wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                    Wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                    break;
-                case "Elliott":
-                    Elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                    Elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                    break;
-                case "Leslie":
-                    Leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
-                    Leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
-                    break;
-            }
-        }
-
-        var spiritScores = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
-        foreach (var house in spiritScores!) {
-            switch (house.Name) {
-                case "Sturt":
-                    Sturt.SpiritScore += house.SpiritScore;
-                    break;
-                case "Wickham":
-                    Wickham.SpiritScore += house.SpiritScore;
-                    break;
-                case "Elliott":
-                    Elliott.SpiritScore += house.SpiritScore;
-                    break;
-                case "Leslie":
-                    Leslie.SpiritScore += house.SpiritScore;
-                    break;
-            }
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        _scoreCards = await DataService.GetHousesWithAggregatedScores();
     }
 
-    public void GoHome() {
+    // protected override void OnInitialized()
+    // {
+    //     List<Room> rooms = [];
+    //     foreach (var room in AppConstants.RoomNumbers)
+    //     {
+    //         var classScores = JsonSerializer.Deserialize<Room>(File.ReadAllText($"ScoreCards/Room{room}.json"));
+    //         rooms.Add(classScores!);
+    //     }
+    //
+    //     foreach (var room in rooms)
+    //     {
+    //         foreach (var house in room.Houses)
+    //         {
+    //             switch (house.Name)
+    //             {
+    //                 case "Sturt":
+    //                     _sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                     _sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                     break;
+    //                 case "Wickham":
+    //                     _wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                     _wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                     break;
+    //                 case "Elliott":
+    //                     _elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                     _elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                     break;
+    //                 case "Leslie":
+    //                     _leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                     _leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                     break;
+    //             }
+    //         }
+    //     }
+    //
+    //     var wholeSchoolScores = JsonSerializer.Deserialize<List<House>>(File.ReadAllText("ScoreCards/SchoolEvents.json"));
+    //     foreach (var house in wholeSchoolScores!)
+    //     {
+    //         switch (house.Name)
+    //         {
+    //             case "Sturt":
+    //                 _sturt.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                 _sturt.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                 break;
+    //             case "Wickham":
+    //                 _wickham.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                 _wickham.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                 break;
+    //             case "Elliott":
+    //                 _elliott.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                 _elliott.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                 break;
+    //             case "Leslie":
+    //                 _leslie.AthleticScore += house.Events.Sum(e => e.AthleticScore);
+    //                 _leslie.SpiritScore += house.Events.Sum(e => e.SpiritScore);
+    //                 break;
+    //         }
+    //     }
+    //
+    //     var spiritScores = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
+    //     foreach (var house in spiritScores!)
+    //     {
+    //         switch (house.Name)
+    //         {
+    //             case "Sturt":
+    //                 _sturt.SpiritScore += house.SpiritScore;
+    //                 break;
+    //             case "Wickham":
+    //                 _wickham.SpiritScore += house.SpiritScore;
+    //                 break;
+    //             case "Elliott":
+    //                 _elliott.SpiritScore += house.SpiritScore;
+    //                 break;
+    //             case "Leslie":
+    //                 _leslie.SpiritScore += house.SpiritScore;
+    //                 break;
+    //         }
+    //     }
+    // }
+
+    private void GoHome()
+    {
         NavigationManager.NavigateTo("/");
     }
+
 }

@@ -11,7 +11,7 @@
         <div>
             <select @bind="SelectedRoom" class="border border-black bg-slate-200 p-2">
                 <option selected disabled hidden>Select a room</option>
-                @foreach (var room in Rooms) {
+                @foreach (var room in AppConstants.RoomNumbers) {
                     <option value="@room">Room @room</option>
                 }
             </select>
@@ -26,7 +26,6 @@
 
 @code {
     [Inject] ApplicationDbContext Context { get; set; } = null!;
-    List<int> Rooms { get; set; } = [5, 6, 7, 8, 12, 13, 14, 15];
     int? SelectedRoom { get; set; } = null;
 
     void GoToClassEvents() {
@@ -36,8 +35,6 @@
     private async Task SeedData() {
         var seed = new Seed(Context);
         await seed.SeedData();
-        
-        // NavigationManager.NavigateTo("/");
     }
 
     private void GoToSchoolEvents() {
