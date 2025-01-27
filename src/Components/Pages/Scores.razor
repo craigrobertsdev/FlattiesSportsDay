@@ -1,6 +1,7 @@
 @page "/scores"
 @using SportsDayScoring.Models
 @using SportsDayScoring.Data
+@using static AppConstants
 
 @inject NavigationManager NavigationManager
 
@@ -12,17 +13,16 @@
         }
         else
         {
-            @for (int i = 0; i < _scoreCards.Count; i++)
-            {
-                <div class="grid auto-rows-auto grid-cols-2 @(AppConstants.HouseBackgroundColours[i]) p-4">
-                    <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">@_scoreCards[i].HouseName</p>
+            @foreach (var houseName in HouseNames) {
+                <div class="grid auto-rows-auto grid-cols-2 @(HouseStyles[houseName].BackgroundColour) p-4">
+                    <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">@houseName</p>
                     <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
                         <p class="font-bold">Athletic Score</p>
-                        @_scoreCards[i].AthleticPoints
+                        @_scoreCards.Get(houseName).AthleticPoints
                     </div>
                     <div class="row-start-2 col-start-2 flex flex-col justify-center items-center">
                         <p class="font-bold">Spirit Score</p>
-                        @_scoreCards[i].SpiritPoints
+                        @_scoreCards.Get(houseName).SpiritPoints
                     </div>
                 </div>
             }
@@ -37,10 +37,6 @@
 @code {
     [Inject] public DataService DataService { get; set; } = null!;
     private List<ScoreCard> _scoreCards = [];
-    private (int AthleticScore, int SpiritScore) _sturt = (0, 0);
-    private (int AthleticScore, int SpiritScore) _wickham = (0, 0);
-    private (int AthleticScore, int SpiritScore) _elliott = (0, 0);
-    private (int AthleticScore, int SpiritScore) _leslie = (0, 0);
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,6 +1,7 @@
 @page "/spirit"
 @using SportsDayScoring.Models
-@using System.Text.Json
+@using static AppConstants
+@using SportsDayScoring.Data
 
 @inject NavigationManager NavigationManager
 
@@ -9,38 +10,37 @@
     <div class="w-[300px] m-auto flex flex-col justify-center items-center gap-2">
         @for (int i = 0; i < 4; i++) {
             var idx = i;
-            <select class="w-full font-bold text-center @HouseColours[idx] p-1" @onchange=@((e) => HandleSpiritScoreChange(e, HouseNames[idx]))>
-                <option selected hidden disabled>@HouseNames[idx]</option>
-                @foreach (var score in SpiritScores) {
+            var houseName = AppConstants.HouseNames[idx];
+            
+            <select class="w-full font-bold text-center @(HouseStyles[houseName].BackgroundColour) p-1" @onchange=@((e) => HandleSpiritScoreChange(e, houseName))>
+                <option selected hidden disabled>@houseName</option>
+                @foreach (var score in AppConstants.SpiritScores) {
                     <option value="@score">@score</option>
                 }
             </select>
         }
         <br/>
-        <button class="bg-green-600 font-bold p-2 w-full" @onclick=SaveScores>Save Scores</button>
+        <button class="bg-green-600 font-bold p-2 w-full" @onclick="SaveScores">Save Scores</button>
         <a href="/" class="bg-sky-200 font-bold p-2 w-full text-center">Return Home</a>
     </div>
 </div>
 
 @code {
-    public string[] HouseColours = ["bg-red-400", "bg-blue-400", "bg-green-400", "bg-yellow-400"];
-    public string[] HouseNames = ["Sturt", "Wickham", "Elliott", "Leslie"];
-    public List<int> SpiritScores = [0, 10, 20, 30, 40];
-    public List<HouseSpirit> Houses { get; set; } = [];
+    [Inject] public DataService DataService { get; set; } = null!;
+    private List<HouseSpirit> _houses = [];
 
-    protected override void OnInitialized() {
-        var houses = JsonSerializer.Deserialize<List<HouseSpirit>>(File.ReadAllText("ScoreCards/Spirit.json"));
-        Houses = houses!;
+    protected override async Task OnInitializedAsync() {
+        _houses = await DataService.GetHouseSpirit();
     }
 
-    public void HandleSpiritScoreChange(ChangeEventArgs e, string houseName) {
-        Houses.First(h => h.Name == houseName).SpiritScore += Int32.Parse((string)e.Value!);
+    private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName) {
+        _houses.First(h => h.Name == houseName).SpiritScore += int.Parse((string)e.Value!);
         StateHasChanged();
     }
 
-    public void SaveScores() {
-        var filePath = "ScoreCards/Spirit.json";
-        File.WriteAllText(filePath, JsonSerializer.Serialize(Houses));
+    private async Task SaveScores()
+    {
+        await DataService.UpdateHouseSpirit(_houses);
 
         NavigationManager.NavigateTo("/");
     }

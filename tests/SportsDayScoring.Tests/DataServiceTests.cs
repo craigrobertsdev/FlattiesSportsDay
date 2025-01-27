@@ -253,4 +253,23 @@ public class DataServiceTests
         Assert.Equal(7, room.HouseEvents.First().EventNumber);
         Assert.Equal(6, room.HouseEvents.Last().EventNumber);
     }
+
+    [Fact]
+    public async Task UpdateHouseSpirit_WhenCalled_Updates()
+    {
+        // Arrange
+        var db = GetDbContext();
+        var seed = new Seed(db);
+        await seed.SeedData();
+        var dataService = new DataService(db);
+        
+        // Act
+        var houseSpirit = await db.HouseSpirits.FirstAsync();
+        houseSpirit.SpiritScore = 40;
+        await dataService.UpdateHouseSpirit([houseSpirit]);
+        
+        // Assert
+        var updatedHouseSpirit = await db.HouseSpirits.FirstAsync();
+        Assert.Equal(40, updatedHouseSpirit.SpiritScore);
+    }
 }

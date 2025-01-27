@@ -1,25 +1,40 @@
 @page "/"
 @using SportsDayScoring.Data
+@using static AppConstants
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
 
 <PageTitle>Home</PageTitle>
 
-<div class="h-full flex flex-col justify-center items-center gap-6">
-    <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day @(DateTime.Now.Year)</h1>
+<div class="h-full flex flex-col justify-center items-center">
+    <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day</h1>
+    <h2 class="text-3xl pb-8 text-center text-bold">@(DateTime.Now.Year)</h2>
     <div class="flex flex-col gap-4">
-        <div>
-            <select @bind="SelectedRoom" class="border border-black bg-gray-200 p-2">
+        <div class="flex gap-2">
+            <select @bind="SelectedRoom" class="border border-black rounded-md p-2">
                 <option selected disabled hidden>Select a room</option>
-                @foreach (var room in AppConstants.RoomNumbers) {
+                @foreach (var room in RoomNumbers)
+                {
                     <option value="@room">Room @room</option>
                 }
             </select>
-            <button @onclick="GoToClassEvents" disabled="@(SelectedRoom == null)" class="border rounded-md p-2 text-lg @(SelectedRoom == null ? "bg-gray-400" : "bg-amber-600")">Class Events</button> </div>
-        <button class="border rounded-md text-center text-lg p-3 bg-blue-400" @onclick="GoToSchoolEvents">Whole School Events</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-yellow-400" @onclick="GoToSpirit">Spirit Points</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-green-400" @onclick="GoToScores">Score Tally</button>
-        <button class="border rounded-md text-center text-lg p-3 bg-red-400" @onclick="SeedData">Reset data - do not touch</button>
+            <button @onclick="GoToClassEvents" disabled="@(SelectedRoom == null)"
+                    class="border rounded-md p-2 text-lg @(SelectedRoom == null ? "bg-transparent" : HouseStyles[HouseNames[0]].BackgroundColour)">
+                Class Events
+            </button>
+        </div>
+        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[1]].BackgroundColour)"
+                @onclick="GoToSchoolEvents">Whole School Events
+        </button>
+        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[2]].BackgroundColour)"
+                @onclick="GoToSpirit">Award Spirit Points
+        </button>
+        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[3]].BackgroundColour)"
+                @onclick="GoToScores">Score Cards
+        </button>
+        <button class="border rounded-md text-center text-lg p-2 bg-red-800" @onclick="SeedData">Reset data - do not
+            touch
+        </button>
     </div>
 </div>
 
@@ -27,24 +42,30 @@
     [Inject] ApplicationDbContext Context { get; set; } = null!;
     int? SelectedRoom { get; set; } = null;
 
-    void GoToClassEvents() {
+    void GoToClassEvents()
+    {
         NavigationManager.NavigateTo($"/class-events/{SelectedRoom}");
     }
 
-    private async Task SeedData() {
+    private async Task SeedData()
+    {
         var seed = new Seed(Context);
         await seed.SeedData();
     }
 
-    private void GoToSchoolEvents() {
+    private void GoToSchoolEvents()
+    {
         NavigationManager.NavigateTo("/school-events");
     }
-    
-    private void GoToSpirit() {
+
+    private void GoToSpirit()
+    {
         NavigationManager.NavigateTo("/spirit");
     }
 
-    private void GoToScores() {
+    private void GoToScores()
+    {
         NavigationManager.NavigateTo("/scores");
-    }   
+    }
+
 }

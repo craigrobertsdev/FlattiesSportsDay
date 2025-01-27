@@ -14,10 +14,12 @@ public class Seed(ApplicationDbContext context)
             await context.Database.EnsureCreatedAsync();
 
             var houses = GenerateHouses();
-            var rooms = GenerateRooms(houses);
-            
-            context.Rooms.AddRange(rooms);
+            var rooms = GenerateRooms();
+            var houseSpirits = GenerateHouseSpirits();
+
             context.Houses.AddRange(houses);
+            context.Rooms.AddRange(rooms);
+            context.HouseSpirits.AddRange(houseSpirits);
             await context.SaveChangesAsync();
 
             var roomsWithIds = await context.Rooms.ToListAsync();
@@ -32,64 +34,24 @@ public class Seed(ApplicationDbContext context)
         }
     }
 
-    private static List<House> GenerateHouses()
-    {
-        var houses = new List<House>();
-        for (int i = 0; i < AppConstants.HouseNames.Length; i++)
-        {
-            houses.Add(new House()
-            {
-                Name = AppConstants.HouseNames[i],
-            });
-        }
+    private List<HouseSpirit> GenerateHouseSpirits() =>
+        AppConstants.HouseNames.Select(n => new HouseSpirit(n)).ToList();
 
-        return houses;
-    }
+    private static List<House> GenerateHouses() =>
+        AppConstants.HouseNames.Select(n => new House(n)).ToList();
 
-    private List<Room> GenerateRooms(List<House> houses)
+    private List<Room> GenerateRooms()
     {
         return
         [
-            new Room
-            {
-                RoomNumber = 5,
-                EventOrderOffset = 7
-            },
-            new Room
-            {
-                RoomNumber = 6,
-                EventOrderOffset = 0
-            },
-            new Room
-            {
-                RoomNumber = 7,
-                EventOrderOffset = 5
-            },
-            new Room
-            {
-                RoomNumber = 8,
-                EventOrderOffset = 6
-            },
-            new Room
-            {
-                RoomNumber = 12,
-                EventOrderOffset = 1,
-            },
-            new Room
-            {
-                RoomNumber = 13,
-                EventOrderOffset = 2,
-            },
-            new Room
-            {
-                RoomNumber = 14,
-                EventOrderOffset = 3,
-            },
-            new Room
-            {
-                RoomNumber = 15,
-                EventOrderOffset = 4,
-            }
+            new Room(5, 7),
+            new Room(6, 0),
+            new Room(7, 5),
+            new Room(8, 6),
+            new Room(12, 1),
+            new Room(13, 2),
+            new Room(14, 3),
+            new Room(15, 4)
         ];
     }
 

@@ -35,6 +35,8 @@ public class DataService
             .Include(e => e.ScoreCards)
             .ToListAsync();
 
+        var houseSpirits = await _context.HouseSpirits.ToListAsync();
+
         var scoreCards = new List<ScoreCard>();
 
         foreach (var house in houses)
@@ -49,6 +51,8 @@ public class DataService
                 scoreCard.AthleticPoints += houseEvent.ScoreCards.Get(house.Name).AthleticPoints;
                 scoreCard.SpiritPoints += houseEvent.ScoreCards.Get(house.Name).SpiritPoints;
             }
+            
+            scoreCard.SpiritPoints += houseSpirits.First(hs => hs.Name == house.Name).SpiritScore;
 
             scoreCards.Add(scoreCard);
         }
@@ -89,6 +93,17 @@ public class DataService
         houseEvent.IsSaved = true;
         
         _context.HouseEvents.Update(houseEvent);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<HouseSpirit>> GetHouseSpirit()
+    {
+        return await _context.HouseSpirits.ToListAsync();
+    }
+
+    public async Task UpdateHouseSpirit(List<HouseSpirit> houses)
+    {
+        _context.HouseSpirits.UpdateRange(houses);
         await _context.SaveChangesAsync();
     }
 }

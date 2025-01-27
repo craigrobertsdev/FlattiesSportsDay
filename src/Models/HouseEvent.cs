@@ -2,12 +2,12 @@
 
 public class HouseEvent
 {
-    public Guid Id { get; set; }
-    public int EventNumber { get; set; }
-    public string Name { get; set; }
-    public List<ScoreCard> ScoreCards { get; set; } = [];
+    public Guid Id { get; init; }
+    public int EventNumber { get; init; }
+    public string Name { get; init; } = string.Empty;
+    public List<ScoreCard> ScoreCards { get; init; } = [];
     public bool IsSaved { get; set; }
-    public Room Room { get; set; }
+    public Room Room { get; init; } = null!;
 
     public HouseEvent(string name, Room room, int eventNumber)
     {

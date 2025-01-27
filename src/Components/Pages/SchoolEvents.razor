@@ -1,11 +1,12 @@
 @page "/school-events"
 @using SportsDayScoring.Models
 @using SportsDayScoring.Data
+@using static AppConstants
 @inject NavigationManager NavigationManager
 
 <div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
     <div class="flex gap-4 w-full items-center justify-center m-2">
-        <select @bind="SelectedEvent" class="border border-black bg-slate-200 font-bold text-center p-2 w-full">
+        <select @bind="SelectedEvent" class="border border-black rounded-md bg-slate-200 font-bold text-center p-2 w-full">
             <option disabled selected hidden>Select Event</option>
             @foreach (var ev in AppConstants.SchoolEvents)
             {
@@ -15,36 +16,36 @@
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">40 points</p>
-        <select @bind="FortyPoints" class="font-bold border border-black p-2">
+        <select @bind="FortyPoints" class="font-bold border border-black rounded-md @(GetBgColour(FortyPoints)) p-2">
             <option disabled selected hidden></option>
-            @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
+            @foreach (var houseName in HouseNames)
             {
-                <option value="@AppConstants.HouseNames[i]">
-                    <p class="h-[20px] w-[20px]">@AppConstants.HouseNames[i]</p>
+                <option value="@houseName">
+                    <p class="h-[20px] w-[20px]">@houseName</p>
                 </option>
             }
         </select>
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">30 points</p>
-        <select @bind="ThirtyPoints" class="font-bold border border-black p-2">
+        <select @bind="ThirtyPoints" class="font-bold border border-black rounded-md @(GetBgColour(ThirtyPoints)) p-2">
             <option disabled selected hidden></option>
-            @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
+            @foreach (var houseName in HouseNames)
             {
-                <option value="@AppConstants.HouseNames[i]">
-                    <p class="h-[20px] w-[20px]">@AppConstants.HouseNames[i]</p>
+                <option value="@houseName">
+                    <p class="h-[20px] w-[20px]">@houseName</p>
                 </option>
             }
         </select>
     </div>
     <div class="flex gap-4 w-[200px] items-center justify-center">
         <p class="font-bold">20 points</p>
-        <select @bind="TwentyPoints" class="font-bold border border-black p-2">
+        <select @bind="TwentyPoints" class="font-bold border border-black rounded-md @(GetBgColour(TwentyPoints)) p-2">
             <option disabled selected hidden></option>
-            @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
+            @foreach (var houseName in HouseNames)
             {
-                <option value="@AppConstants.HouseNames[i]">
-                    <p class="h-[20px] w-[20px]">@AppConstants.HouseNames[i]</p>
+                <option value="@houseName">
+                    <p class="h-[20px] w-[20px]">@houseName</p>
                 </option>
             }
         </select>
@@ -53,28 +54,35 @@
     {
         <div class="flex gap-4 w-[200px] items-center justify-center">
             <p class="font-bold">10 points</p>
-            <select @bind=TenPoints class="font-bold border border-black p-2">
+            <select @bind=TenPoints class="font-bold border border-black rounded-md @(GetBgColour(TenPoints)) p-2">
                 <option disabled selected hidden></option>
-                @for (int i = 0; i < AppConstants.HouseTextColours.Length; i++)
+                @foreach (var houseName in HouseNames)
                 {
-                    <option value="@AppConstants.HouseNames[i]">
-                        <p class="h-[20px] w-[20px]">@AppConstants.HouseNames[i]</p>
+                    <option value="@houseName">
+                    <p class="h-[20px] w-[20px]">@houseName</p>
                     </option>
                 }
             </select>
         </div>
     }
-    <button class="@(_error ? "bg-red-600" : "bg-green-600") font-bold p-2 w-full" disabled="@(SelectedEvent is null)"
-            @onclick="SaveScoresAsync">Save Scores
+    @if (_errorMessage is not null)
+    {
+        <p class="text-red-500">@_errorMessage</p>
+    }
+
+    <button
+        class="@(SelectedEvent is null ? "bg-transparent" : _errorMessage != null ? "bg-red-600" : "bg-green-500") font-bold border rounded-md p-2 w-full"
+        disabled="@(SelectedEvent is null)"
+        @onclick="SaveScoresAsync">Save Scores
     </button>
-    <a href="/" class="bg-sky-200 font-bold p-2 w-full text-center">Return Home</a>
+    <a href="/" class="bg-sky-200 font-bold p-2 w-full rounded-md text-center">Return Home</a>
 </div>
 
 @code {
-    [Parameter] public DataService DataService { get; set; }
-    private bool _error;
+    [Inject] public DataService DataService { get; set; } = null!;
     private string? SelectedEvent { get; set; }
     private readonly List<ScoreCard> _eventScores = [];
+    private string? _errorMessage;
 
     private HouseName? FortyPoints { get; set; }
     private HouseName? ThirtyPoints { get; set; }
@@ -89,12 +97,19 @@
         }
     }
 
+    private string GetBgColour(HouseName? houseName)
+    {
+        return houseName is null ? "" : HouseStyles[houseName.Value].BackgroundColour;
+    }
+
     private async Task SaveScoresAsync()
     {
-        if (SelectedEvent is null || FortyPoints is null || ThirtyPoints is null || TwentyPoints is null
+        _errorMessage = null;
+
+        if (FortyPoints is null || ThirtyPoints is null || TwentyPoints is null
             || (SelectedEvent == "Tug of War" && TenPoints is null) || (SelectedEvent == "Team Chants" && TenPoints is null))
         {
-            _error = true;
+            _errorMessage = "Please select a house for each score";
             return;
         }
 

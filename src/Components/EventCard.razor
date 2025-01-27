@@ -1,5 +1,6 @@
 @using SportsDayScoring.Components.Pages
 @using SportsDayScoring.Models
+@using static AppConstants
 
 @inject NavigationManager NavManager
 
@@ -8,16 +9,16 @@
     <div class="pl-2 row-start-1 row-span-2 col-start-1 flex justify-center items-center font-bold bg-slate-200">
         @HouseEvent.Name
     </div>
-    @for (int i = 0; i < 4; i++)
+    @for (int i = 0; i < HouseNames.Length; i++)
     {
         var idx = i;
-        var houseName = AppConstants.HouseNames[i];
+        var houseName = HouseNames[i];
         <div class="row-start-1 row-span-2 col-start-@(idx + 2)">
             <div class="row-span-2">
                 @* // For where the event has not been completed yet *@
                 @if (!HouseEvent.IsSaved)
                 {
-                    <select class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1"
+                    <select class="border-b w-full text-center @HouseStyles[houseName].BackgroundColour p-1"
                             @onchange=@((e) => HandleAthleticScoreChange(e, houseName))>
                         <option disabled hidden selected>Athletic</option>
                         @foreach (var score in AppConstants.AthleticScores)
@@ -25,7 +26,7 @@
                             <option value="@score">@score</option>
                         }
                     </select>
-                    <select class="w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1"
+                    <select class="w-full text-center @HouseStyles[houseName].BackgroundColour p-1"
                             @onchange=@((e) => HandleSpiritScoreChange(e, houseName))>
                         <option disabled hidden selected>Spirit</option>
                         @foreach (var score in AppConstants.SpiritScores)
@@ -36,10 +37,10 @@
                 }
                 else
                 {
-                    <div class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
+                    <div class="border-b w-full text-center @HouseStyles[houseName].BackgroundColour p-1">
                         @HouseEvent.ScoreCards.Get(houseName).AthleticPoints
                     </div>
-                    <div class="w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
+                    <div class="w-full text-center @HouseStyles[houseName].BackgroundColour p-1">
                         @HouseEvent.ScoreCards.Get(houseName).SpiritPoints
                     </div>
                 }
@@ -89,13 +90,13 @@
 
     private void HandleAthleticScoreChange(ChangeEventArgs e, HouseName houseName)
     {
-        HouseEvent.ScoreCards.Get(houseName).AthleticPoints = Int32.Parse((string)e.Value!);
+        HouseEvent.ScoreCards.Get(houseName).AthleticPoints = int.Parse((string)e.Value!);
         StateHasChanged();
     }
 
     private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName)
     {
-        HouseEvent.ScoreCards.Get(houseName).SpiritPoints = Int32.Parse((string)e.Value!);
+        HouseEvent.ScoreCards.Get(houseName).SpiritPoints = int.Parse((string)e.Value!);
         StateHasChanged();
     }
 

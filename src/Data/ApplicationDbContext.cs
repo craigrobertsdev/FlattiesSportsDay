@@ -8,7 +8,9 @@ public class ApplicationDbContext : DbContext
     public DbSet<Room> Rooms { get; set; }
     public DbSet<HouseEvent> HouseEvents { get; set; }
     public DbSet<House> Houses { get; set; }
-    
+
+    public DbSet<HouseSpirit> HouseSpirits { get; set; }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         Database.EnsureCreated();
@@ -22,7 +24,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Room>()
             .HasMany(r => r.HouseEvents)
             .WithOne(e => e.Room);
-        
+
         modelBuilder.Entity<House>()
             .HasKey(x => x.Id);
 
@@ -36,5 +38,8 @@ public class ApplicationDbContext : DbContext
                 scb.HasKey("Id");
                 scb.WithOwner().HasForeignKey("EventId");
             });
+
+        modelBuilder.Entity<HouseSpirit>()
+            .HasKey(hs => hs.Id);
     }
 }
