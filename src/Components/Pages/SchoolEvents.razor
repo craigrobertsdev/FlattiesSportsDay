@@ -116,7 +116,7 @@
             _eventScores.First(sc => sc.HouseName == TenPoints).SpiritPoints += 10;
         }
 
-        await DataService.UpdateWholeSchoolEventScores(SelectedEvent, _eventScores);
+        await DataService.UpdateWholeSchoolEventScores(_eventScores);
         NavigationManager.NavigateTo("/school-events", true);
     }
 

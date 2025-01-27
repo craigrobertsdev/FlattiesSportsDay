@@ -1,6 +1,6 @@
 ﻿namespace SportsDayScoring.Models;
 
-public class Event
+public class HouseEvent
 {
     public Guid Id { get; set; }
     public int EventNumber { get; set; }
@@ -9,7 +9,7 @@ public class Event
     public bool IsSaved { get; set; }
     public Room Room { get; set; }
 
-    public Event(string name, Room room, int eventNumber)
+    public HouseEvent(string name, Room room, int eventNumber)
     {
         Name = name;
         EventNumber = eventNumber;
@@ -21,7 +21,7 @@ public class Event
         }
     }
 
-    private Event()
+    private HouseEvent()
     {
     }
 }

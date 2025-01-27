@@ -19,9 +19,9 @@
     }
     else
     {
-        @foreach (var ev in Room.Events)
+        @foreach (var ev in Room.HouseEvents)
         {
-            <EventCard Event="@ev" Parent="this"/>
+            <EventCard HouseEvent="@ev" Parent="this"/>
         }
     }
 </div>

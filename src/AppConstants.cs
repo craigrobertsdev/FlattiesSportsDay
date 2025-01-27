@@ -6,7 +6,7 @@ public static class AppConstants
 {
     public static readonly int[] RoomNumbers = [5, 6, 7, 8, 12, 13, 14, 15];
 
-    public static readonly string[] ClassEvents =
+    public static readonly string[] HouseEvents =
         ["Long Jump", "Gaga Ball", "Bombardment", "Marathon", "Hurdles", "Nerf Javelin", "Spoke Relay", "Shot Put"];
 
     public static readonly string[] SchoolEvents =

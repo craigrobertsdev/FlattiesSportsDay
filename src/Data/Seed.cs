@@ -23,7 +23,7 @@ public class Seed(ApplicationDbContext context)
             var roomsWithIds = await context.Rooms.ToListAsync();
             var events = GenerateEvents(roomsWithIds);
 
-            context.Events.AddRange(events);
+            context.HouseEvents.AddRange(events);
             await context.SaveChangesAsync();
         }
         catch (Exception e)
@@ -93,14 +93,14 @@ public class Seed(ApplicationDbContext context)
         ];
     }
 
-    private List<Event> GenerateEvents(List<Room> rooms)
+    private List<HouseEvent> GenerateEvents(List<Room> rooms)
     {
-        var events = new List<Event>();
+        var events = new List<HouseEvent>();
         foreach (var room in rooms)
         {
-            for (int i = 0; i < AppConstants.ClassEvents.Length; i++)
+            for (int i = 0; i < AppConstants.HouseEvents.Length; i++)
             {
-                events.Add(new(AppConstants.ClassEvents[i], room, i));
+                events.Add(new(AppConstants.HouseEvents[i], room, i));
             }
         }
 

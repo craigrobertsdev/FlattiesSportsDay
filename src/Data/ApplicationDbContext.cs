@@ -6,7 +6,7 @@ namespace SportsDayScoring.Data;
 public class ApplicationDbContext : DbContext
 {
     public DbSet<Room> Rooms { get; set; }
-    public DbSet<Event> Events { get; set; }
+    public DbSet<HouseEvent> HouseEvents { get; set; }
     public DbSet<House> Houses { get; set; }
     
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
@@ -20,16 +20,16 @@ public class ApplicationDbContext : DbContext
             .HasKey(x => x.Id);
 
         modelBuilder.Entity<Room>()
-            .HasMany(r => r.Events)
+            .HasMany(r => r.HouseEvents)
             .WithOne(e => e.Room);
         
         modelBuilder.Entity<House>()
             .HasKey(x => x.Id);
 
-        modelBuilder.Entity<Event>()
+        modelBuilder.Entity<HouseEvent>()
             .HasKey(x => x.Id);
 
-        modelBuilder.Entity<Event>()
+        modelBuilder.Entity<HouseEvent>()
             .OwnsMany(e => e.ScoreCards, scb =>
             {
                 scb.Property<Guid>("Id");

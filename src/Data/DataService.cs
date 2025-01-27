@@ -12,7 +12,7 @@ public class DataService
         _context = context;
     }
 
-    public async Task UpdateWholeSchoolEventScores(string eventName, List<ScoreCard> scoreCards)
+    public async Task UpdateWholeSchoolEventScores(List<ScoreCard> scoreCards)
     {
         var houses = await _context.Houses
             .ToListAsync();
@@ -31,7 +31,7 @@ public class DataService
         var houses = await _context.Houses
             .ToListAsync();
 
-        var events = await _context.Events
+        var events = await _context.HouseEvents
             .Include(e => e.ScoreCards)
             .ToListAsync();
 
@@ -60,33 +60,35 @@ public class DataService
     {
         var room = await _context.Rooms
             .Where(r => r.RoomNumber == roomNumber)
-            .Include(r => r.Events)
+            .Include(r => r.HouseEvents)
             .FirstAsync();
 
-        room.Events.Sort((a, b) => a.EventNumber < b.EventNumber ? -1 : 1);
+        room.HouseEvents.Sort((a, b) => a.EventNumber < b.EventNumber ? -1 : 1);
 
-        var events = new List<Event>();
+        var events = new List<HouseEvent>();
         var idx = room.EventOrderOffset;
 
-        while (events.Count < room.Events.Count)
+        while (events.Count < room.HouseEvents.Count)
         {
-            if (idx >= room.Events.Count)
+            if (idx >= room.HouseEvents.Count)
             {
                 idx = 0;
             }
 
-            events.Add(room.Events[idx]);
+            events.Add(room.HouseEvents[idx]);
             idx++;
         }
 
-        room.Events = events;
+        room.HouseEvents = events;
 
         return room;
     }
 
-    public async Task UpdateEvent(Event houseEvent)
+    public async Task UpdateHouseEvent(HouseEvent houseEvent)
     {
-        _context.Events.Update(houseEvent);
+        houseEvent.IsSaved = true;
+        
+        _context.HouseEvents.Update(houseEvent);
         await _context.SaveChangesAsync();
     }
 }

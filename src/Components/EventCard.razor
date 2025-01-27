@@ -6,7 +6,7 @@
 <div
     class="grid grid-cols-[150px_repeat(4,_0.7fr)_1fr] grid-rows-2 overflow-x-auto border border-black w-\[500px\] mb-3">
     <div class="pl-2 row-start-1 row-span-2 col-start-1 flex justify-center items-center font-bold bg-slate-200">
-        @Event.Name
+        @HouseEvent.Name
     </div>
     @for (int i = 0; i < 4; i++)
     {
@@ -15,7 +15,7 @@
         <div class="row-start-1 row-span-2 col-start-@(idx + 2)">
             <div class="row-span-2">
                 @* // For where the event has not been completed yet *@
-                @if (!Event.IsSaved)
+                @if (!HouseEvent.IsSaved)
                 {
                     <select class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1"
                             @onchange=@((e) => HandleAthleticScoreChange(e, houseName))>
@@ -37,16 +37,16 @@
                 else
                 {
                     <div class="border-b w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
-                        @Event.ScoreCards.Get(houseName).AthleticPoints
+                        @HouseEvent.ScoreCards.Get(houseName).AthleticPoints
                     </div>
                     <div class="w-full text-center @AppConstants.HouseBackgroundColours[idx] p-1">
-                        @Event.ScoreCards.Get(houseName).SpiritPoints
+                        @HouseEvent.ScoreCards.Get(houseName).SpiritPoints
                     </div>
                 }
             </div>
         </div>
     }
-    @if (Event.IsSaved)
+    @if (HouseEvent.IsSaved)
     {
         <div class="flex row-start-1 row-span-2 col-start-6 justify-center items-center font-bold bg-slate-400"></div>
     }
@@ -62,24 +62,22 @@
 
 @code {
     [Parameter] public ClassEvents Parent { get; set; } = null!;
-    [Parameter] public Event Event { get; set; } = null!;
+    [Parameter] public HouseEvent HouseEvent { get; set; } = null!;
     [Parameter] public bool Disabled { get; set; }
     private bool _isError;
 
     private async Task SaveScores()
     {
         _isError = false;
-        if (Event.ScoreCards.Any(v => v.AthleticPoints == 0))
+        if (HouseEvent.ScoreCards.Any(v => v.AthleticPoints == 0))
         {
             _isError = true;
             return;
         }
 
-        Event.IsSaved = true;
-
         try
         {
-            await Parent.DataService.UpdateEvent(Event);
+            await Parent.DataService.UpdateHouseEvent(HouseEvent);
         }
         catch (Exception e)
         {
@@ -91,13 +89,13 @@
 
     private void HandleAthleticScoreChange(ChangeEventArgs e, HouseName houseName)
     {
-        Event.ScoreCards.Get(houseName).AthleticPoints = Int32.Parse((string)e.Value!);
+        HouseEvent.ScoreCards.Get(houseName).AthleticPoints = Int32.Parse((string)e.Value!);
         StateHasChanged();
     }
 
     private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName)
     {
-        Event.ScoreCards.Get(houseName).SpiritPoints = Int32.Parse((string)e.Value!);
+        HouseEvent.ScoreCards.Get(houseName).SpiritPoints = Int32.Parse((string)e.Value!);
         StateHasChanged();
     }
 
