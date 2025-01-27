@@ -14,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
-builder.Services.AddTransient<DataService>();
+builder.Services.AddScoped<DataService>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

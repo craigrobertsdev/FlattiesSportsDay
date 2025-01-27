@@ -17,6 +17,7 @@ public class Seed(ApplicationDbContext context)
             var rooms = GenerateRooms(houses);
             
             context.Rooms.AddRange(rooms);
+            context.Houses.AddRange(houses);
             await context.SaveChangesAsync();
 
             var roomsWithIds = await context.Rooms.ToListAsync();

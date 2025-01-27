@@ -1,4 +1,6 @@
-﻿namespace SportsDayScoring;
+﻿using SportsDayScoring.Components;
+
+namespace SportsDayScoring;
 
 public static class AppConstants
 {

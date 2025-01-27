@@ -1,0 +1,55 @@
+@page "/scores"
+@using SportsDayScoring.Models
+@using SportsDayScoring.Data
+
+@inject NavigationManager NavigationManager
+
+<div class="p-2 w-full">
+    <div class="flex flex-col gap-2">
+        @if (_scoreCards is null)
+        {
+            <div>Loading...</div>
+        }
+        else
+        {
+            @for (int i = 0; i < _scoreCards.Count; i++)
+            {
+                <div class="grid auto-rows-auto grid-cols-2 @(AppConstants.HouseBackgroundColours[i]) p-4">
+                    <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">@_scoreCards[i].HouseName</p>
+                    <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
+                        <p class="font-bold">Athletic Score</p>
+                        @_scoreCards[i].AthleticPoints
+                    </div>
+                    <div class="row-start-2 col-start-2 flex flex-col justify-center items-center">
+                        <p class="font-bold">Spirit Score</p>
+                        @_scoreCards[i].SpiritPoints
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="w-full text-right px-2 pb-2">
+    <button class="bg-sky-200 font-bold p-2 mx-auto" @onclick="GoHome">Return Home</button>
+</div>
+
+@code {
+    [Inject] public DataService DataService { get; set; } = null!;
+    private List<ScoreCard> _scoreCards = [];
+    private (int AthleticScore, int SpiritScore) _sturt = (0, 0);
+    private (int AthleticScore, int SpiritScore) _wickham = (0, 0);
+    private (int AthleticScore, int SpiritScore) _elliott = (0, 0);
+    private (int AthleticScore, int SpiritScore) _leslie = (0, 0);
+
+    protected override async Task OnInitializedAsync()
+    {
+        _scoreCards = await DataService.GetHousesWithAggregatedScores();
+    }
+
+    private void GoHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+}

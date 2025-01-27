@@ -40,18 +40,15 @@ public class DataService
         foreach (var house in houses)
         {
             var scoreCard = new ScoreCard(house.Name);
+
             scoreCard.AthleticPoints += house.SchoolEventAthleticScore;
             scoreCard.SpiritPoints += house.SchoolEventSpiritScore;
 
             foreach (var houseEvent in events)
             {
-                foreach (var sc in houseEvent.ScoreCards)
-                {
-                    scoreCards.Get(sc.HouseName).AthleticPoints += sc.AthleticPoints;
-                    scoreCards.Get(sc.HouseName).SpiritPoints += sc.SpiritPoints;
-                }
+                scoreCard.AthleticPoints += houseEvent.ScoreCards.Get(house.Name).AthleticPoints;
+                scoreCard.SpiritPoints += houseEvent.ScoreCards.Get(house.Name).SpiritPoints;
             }
-
 
             scoreCards.Add(scoreCard);
         }
@@ -61,11 +58,11 @@ public class DataService
 
     public async Task<Room> GetRoom(int roomNumber)
     {
-        var room =  await _context.Rooms
+        var room = await _context.Rooms
             .Where(r => r.RoomNumber == roomNumber)
             .Include(r => r.Events)
             .FirstAsync();
-        
+
         room.Events.Sort((a, b) => a.EventNumber < b.EventNumber ? -1 : 1);
 
         var events = new List<Event>();
@@ -77,13 +74,13 @@ public class DataService
             {
                 idx = 0;
             }
-            
+
             events.Add(room.Events[idx]);
             idx++;
         }
 
         room.Events = events;
-        
+
         return room;
     }
 
