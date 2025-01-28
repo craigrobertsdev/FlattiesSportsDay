@@ -8,20 +8,25 @@
 <div class="flex flex-col gap-2 justify-center items-center">
     <h1 class="text-lg font-bold">Spirit Points</h1>
     <div class="w-[300px] m-auto flex flex-col justify-center items-center gap-2">
-        @for (int i = 0; i < 4; i++) {
+        @for (int i = 0; i < HouseNames.Length; i++)
+        {
             var idx = i;
-            var houseName = AppConstants.HouseNames[idx];
-            
-            <select class="w-full font-bold text-center @(HouseStyles[houseName].BackgroundColour) p-1" @onchange=@((e) => HandleSpiritScoreChange(e, houseName))>
-                <option selected hidden disabled>@houseName</option>
-                @foreach (var score in AppConstants.SpiritScores) {
-                    <option value="@score">@score</option>
-                }
-            </select>
+            var houseName = HouseNames[idx];
+
+            <div class="grid grid-cols-2 items-center w-full gap-2">
+                <p class="text-right pr-4">@houseName</p>
+                <select class="w-full text-center col-start-2 @(HouseStyles[houseName].BackgroundColour) p-1"
+                        @onchange=@((e) => HandleSpiritScoreChange(e, houseName))>
+                    @foreach (var score in AppConstants.SpiritScores)
+                    {
+                        <option value="@score">@score</option>
+                    }
+                </select>
+            </div>
         }
         <br/>
-        <button class="bg-green-600 font-bold p-2 w-full" @onclick="SaveScores">Save Scores</button>
-        <a href="/" class="bg-sky-200 font-bold p-2 w-full text-center">Return Home</a>
+        <button class="text-lg bg-green-600 border rounded-md p-2 w-full" @onclick="SaveScores">Save Scores</button>
+        <a href="/" class="text-lg bg-sky-200 border rounded-md p-2 w-full text-center">Return Home</a>
     </div>
 </div>
 
@@ -29,11 +34,13 @@
     [Inject] public DataService DataService { get; set; } = null!;
     private List<HouseSpirit> _houses = [];
 
-    protected override async Task OnInitializedAsync() {
+    protected override async Task OnInitializedAsync()
+    {
         _houses = await DataService.GetHouseSpirit();
     }
 
-    private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName) {
+    private void HandleSpiritScoreChange(ChangeEventArgs e, HouseName houseName)
+    {
         _houses.First(h => h.Name == houseName).SpiritScore += int.Parse((string)e.Value!);
         StateHasChanged();
     }
@@ -44,4 +51,5 @@
 
         NavigationManager.NavigateTo("/");
     }
+
 }

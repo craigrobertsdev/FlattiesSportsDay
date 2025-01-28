@@ -6,26 +6,45 @@
 @inject NavigationManager NavigationManager
 
 <div class="p-2 w-full">
+    <h1 class="text-3xl text-center font-bold pb-4">Score Cards</h1>
     <div class="flex flex-col gap-2">
-        @if (_scoreCards is null)
+        @if (_athleticsScoreCards.Count == 0)
         {
             <div>Loading...</div>
         }
         else
         {
-            @foreach (var houseName in HouseNames) {
-                <div class="grid auto-rows-auto grid-cols-2 @(HouseStyles[houseName].BackgroundColour) p-4">
-                    <p class="text-lg text-center row-start-1 col-start-1 col-span-2 font-bold">@houseName</p>
-                    <div class="row-start-2 col-start-1 flex flex-col justify-between items-center">
-                        <p class="font-bold">Athletic Score</p>
-                        @_scoreCards.Get(houseName).AthleticPoints
+            // Athletics scores table
+            <h2 class="text-2xl text-center font-bold">Athletics Scores</h2>
+            <div class="grid grid-cols-[0.2fr_0.7fr_0.5fr] text-center border">
+                @for (int i = 0; i < _athleticsScoreCards.Count; i++)
+                {
+                    <div
+                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(GetPlaceText(_athleticsScoreCards[i].Place))</div>
+                    <div
+                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@_athleticsScoreCards[i].ScoreCard.HouseName</div>
+                    <div
+                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(_athleticsScoreCards[i].ScoreCard.AthleticPoints) points
                     </div>
-                    <div class="row-start-2 col-start-2 flex flex-col justify-center items-center">
-                        <p class="font-bold">Spirit Score</p>
-                        @_scoreCards.Get(houseName).SpiritPoints
+                }
+
+            </div>
+
+            // Spirit scores table
+            <h2 class="text-2xl text-center font-bold">Spirit Scores</h2>
+            <div class="grid grid-cols-[0.2fr_0.7fr_0.5fr] text-center border">
+                @for (int i = 0; i < _spiritScoreCards.Count; i++)
+                {
+                    <div
+                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(GetPlaceText(_spiritScoreCards[i].Place))</div>
+                    <div
+                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@_spiritScoreCards[i].ScoreCard.HouseName</div>
+                    <div
+                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(_spiritScoreCards[i].ScoreCard.SpiritPoints) points
                     </div>
-                </div>
-            }
+                }
+
+            </div>
         }
     </div>
 </div>
@@ -36,16 +55,61 @@
 
 @code {
     [Inject] public DataService DataService { get; set; } = null!;
-    private List<ScoreCard> _scoreCards = [];
+    private List<OrderedScoreCard> _athleticsScoreCards = [];
+    private List<OrderedScoreCard> _spiritScoreCards = [];
 
     protected override async Task OnInitializedAsync()
     {
-        _scoreCards = await DataService.GetHousesWithAggregatedScores();
+        var scoreCards = await DataService.GetHousesWithAggregatedScores();
+        scoreCards.Sort((a, b) => b.AthleticPoints.CompareTo(a.AthleticPoints));
+
+        int place = 1;
+        for (int i = 0; i < scoreCards.Count; i++)
+        {
+            if (i > 0 && scoreCards[i].AthleticPoints == scoreCards[i - 1].AthleticPoints)
+            {
+                _athleticsScoreCards.Add(new OrderedScoreCard(_athleticsScoreCards[i - 1].Place, scoreCards[i]));
+            }
+            else
+            {
+                _athleticsScoreCards.Add(new OrderedScoreCard(place, scoreCards[i]));
+            }
+
+            place++;
+        }
+
+        scoreCards.Sort((a, b) => b.SpiritPoints.CompareTo(a.SpiritPoints));
+
+        place = 1;
+        for (int i = 0; i < scoreCards.Count; i++)
+        {
+            if (i > 0 && scoreCards[i].SpiritPoints == scoreCards[i - 1].SpiritPoints)
+            {
+                _spiritScoreCards.Add(new OrderedScoreCard(_spiritScoreCards[i - 1].Place, scoreCards[i]));
+            }
+            else
+            {
+                _spiritScoreCards.Add(new OrderedScoreCard(place, scoreCards[i]));
+            }
+
+            place++;
+        }
     }
 
     private void GoHome()
     {
         NavigationManager.NavigateTo("/");
     }
+
+    private string GetPlaceText(int i) =>
+        i switch
+        {
+            1 => "1st",
+            2 => "2nd",
+            3 => "3rd",
+            _ => $"{i}th"
+        };
+
+    record OrderedScoreCard(int Place, ScoreCard ScoreCard);
 
 }
