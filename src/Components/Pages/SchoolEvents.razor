@@ -6,7 +6,8 @@
 
 <div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
     <div class="flex gap-4 w-full items-center justify-center m-2">
-        <select @bind="SelectedEvent" class="border border-black rounded-md bg-slate-200 font-bold text-center p-2 w-full">
+        <select @bind="SelectedEvent"
+                class="border border-black rounded-md bg-slate-200 font-bold text-center p-2 w-full">
             <option disabled selected hidden>Select Event</option>
             @foreach (var ev in AppConstants.SchoolEvents)
             {
@@ -59,7 +60,7 @@
                 @foreach (var houseName in HouseNames)
                 {
                     <option value="@houseName">
-                    <p class="h-[20px] w-[20px]">@houseName</p>
+                        <p class="h-[20px] w-[20px]">@houseName</p>
                     </option>
                 }
             </select>
@@ -71,8 +72,8 @@
     }
 
     <button
-        class="@(SelectedEvent is null ? "bg-transparent" : _errorMessage != null ? "bg-red-600" : "bg-green-500") font-bold border rounded-md p-2 w-full"
-        disabled="@(SelectedEvent is null)"
+        class="@(SaveScoresIsDisabled() ? "bg-transparent" : _errorMessage != null ? "bg-red-600" : "bg-green-500") font-bold border rounded-md p-2 w-full"
+        disabled="@(SaveScoresIsDisabled())"
         @onclick="SaveScoresAsync">Save Scores
     </button>
     <a href="/" class="bg-sky-200 font-bold p-2 w-full rounded-md text-center">Return Home</a>
@@ -91,7 +92,7 @@
 
     protected override void OnInitialized()
     {
-        foreach (var houseName in AppConstants.HouseNames)
+        foreach (var houseName in HouseNames)
         {
             _eventScores.Add(new ScoreCard(houseName));
         }
@@ -133,6 +134,15 @@
 
         await DataService.UpdateWholeSchoolEventScores(_eventScores);
         NavigationManager.NavigateTo("/school-events", true);
+    }
+
+    private bool SaveScoresIsDisabled()
+    {
+        return SelectedEvent is null || FortyPoints is null
+               || ThirtyPoints is null
+               || TwentyPoints is null
+               || (SelectedEvent == "Tug of War" && TenPoints is null)
+               || (SelectedEvent == "Team Chants" && TenPoints is null);
     }
 
 }
