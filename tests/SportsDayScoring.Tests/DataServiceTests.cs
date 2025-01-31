@@ -272,4 +272,22 @@ public class DataServiceTests
         var updatedHouseSpirit = await db.HouseSpirits.FirstAsync();
         Assert.Equal(40, updatedHouseSpirit.SpiritScore);
     }
+
+    [Fact]
+    public async Task GetHousesWithAggregatedScores_WhenAllEventsAreComplete_CorrectlyReturnsScores()
+    {
+        var db = GetDbContext();
+        var seed = new Seed(db);
+        await seed.SeedData();
+        var dataService = new DataService(db);
+        var results = await TestHelpers.CompleteAllEvents(db);
+        
+        // Act
+        var scoreCards = await dataService.GetHousesWithAggregatedScores();
+        
+        // Assert
+        Assert.Equal(4, scoreCards.Count);
+        Assert.Equal(results["athletics"][HouseName.Elliott], scoreCards.Get(HouseName.Elliott).AthleticPoints);
+        Assert.Equal(results["spirit"][HouseName.Sturt], scoreCards.Get(HouseName.Sturt).SpiritPoints);
+    }
 }

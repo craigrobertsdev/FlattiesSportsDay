@@ -10,13 +10,6 @@
 	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">INFO</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f8957ec4_002D5c57_002D467b_002D97ce_002D90d33c13bece/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="UpdateWholeSchoolEventScores_WhenGivenScoreCards_UpdatesHouseScores" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.UpdateWholeSchoolEvents_WhenGivenScoreCardsAndCurrentScoresAreNotZero_UpdatesHouseScores&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.GetHousesWithAggregatedScores_WhenCalled_ReturnsHouseScores&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.UpdateHouseEvent_WhenContainedScoreCardsHaveScores_Updates&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.GetHousesWithAggregatedScores_WhenScoresAreNotZero_ReturnsHouseScores&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.GetHousesWithAggregatedScores_WhenHouseScoresAndHouseEventScoreCardsAreNotZero_ReturnsHouseScores&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.GetRoom_WhenCalled_ReturnsRoomWithEventsOrderedCorrectly&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.UpdateWholeSchoolEventScores_WhenGivenScoreCardsAndCurrentScoresAreZero_UpdatesHouseScores&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net9.0::SportsDayScoring.Tests.DataServiceTests.UpdateHouseSpirit_WhenCalled_Updates&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::D0A56255-B6EB-480D-9F75-DBD2865502EC::net8.0::SportsDayScoring.Tests.DataServiceTests.GetHousesWithAggregatedScores_WhenAllEventsAreComplete_CorrectlyReturnsScores&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
