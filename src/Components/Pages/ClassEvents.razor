@@ -21,7 +21,7 @@
     {
         @foreach (var ev in Room.HouseEvents)
         {
-            <EventCard HouseEvent="@ev" Parent="this"/>
+            <EventCard HouseEvent="@ev" Parent="this" />
         }
     }
 </div>
@@ -39,10 +39,46 @@
         {
             var room = await DataService.GetRoom(RoomNumber);
             Room = room;
+            OnEventSaved();
         }
         catch (Exception e)
         {
             _error = e.Message;
         }
+    }
+
+    private void OnEventSaved()
+    {
+        if (Room is null)
+        {
+            return;
+        }
+
+        var idx = 0;
+        while (Room.HouseEvents[idx].IsSaved)
+        {
+            idx++;
+            
+            if (idx == Room.HouseEvents.Count)
+            {
+                idx = 0;
+                break;
+            }
+        }
+
+        var orderedEvents = new List<HouseEvent>();
+        while (orderedEvents.Count < Room.HouseEvents.Count)
+        {
+            orderedEvents.Add(Room.HouseEvents[idx]);
+            idx++;
+
+            if (idx == Room.HouseEvents.Count)
+            {
+                idx = 0;
+            }
+        }
+        
+        Room.HouseEvents = orderedEvents;
+        StateHasChanged();
     }
 }
