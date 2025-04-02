@@ -29,7 +29,7 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: Apply database migrations
-        run: dotnet ef database update
+        run: dotnet ef database update --project src
           
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
