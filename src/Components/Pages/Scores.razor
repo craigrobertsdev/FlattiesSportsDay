@@ -1,9 +1,11 @@
 @page "/scores"
+@using Microsoft.AspNetCore.Authorization
 @using SportsDayScoring.Models
 @using SportsDayScoring.Data
 @using static AppConstants
 
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <div class="p-2 w-full">
     <h1 class="text-3xl text-center font-bold pb-4">Score Cards</h1>

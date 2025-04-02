@@ -10,8 +10,11 @@ public class Seed(ApplicationDbContext context)
         // Change the way that IDs are generated so the DB does it. After each type of object is saved, retrieve those objects from the database and use the DB generated Ids to create the other objects.
         try
         {
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
+            context.HouseEvents.RemoveRange(context.HouseEvents);
+            context.HouseSpirits.RemoveRange(context.HouseSpirits);
+            context.Rooms.RemoveRange(context.Rooms);
+            context.Houses.RemoveRange(context.Houses);
+            await context.SaveChangesAsync();
 
             var houses = GenerateHouses();
             var rooms = GenerateRooms();

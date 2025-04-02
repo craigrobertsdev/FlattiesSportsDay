@@ -1,6 +1,9 @@
 @page "/class-events/{roomNumber:int}"
+@using Microsoft.AspNetCore.Authorization
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
+
+@attribute [Authorize]
 
 <h1 class="text-xl text-center font-bold px-4 items-center relative">
     Room @RoomNumber

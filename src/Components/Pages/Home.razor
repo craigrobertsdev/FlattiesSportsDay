@@ -1,8 +1,11 @@
 @page "/"
+@using Microsoft.AspNetCore.Authorization
 @using SportsDayScoring.Data
 @using static AppConstants
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
+
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 

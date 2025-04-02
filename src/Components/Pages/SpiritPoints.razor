@@ -1,9 +1,11 @@
 @page "/spirit"
+@using Microsoft.AspNetCore.Authorization
 @using SportsDayScoring.Models
 @using static AppConstants
 @using SportsDayScoring.Data
 
 @inject NavigationManager NavigationManager
+@attribute [Authorize]
 
 <div class="flex flex-col gap-2 justify-center items-center">
     <h1 class="text-lg font-bold">Spirit Points</h1>

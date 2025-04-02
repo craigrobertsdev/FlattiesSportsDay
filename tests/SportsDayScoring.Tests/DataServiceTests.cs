@@ -262,12 +262,12 @@ public class DataServiceTests
         var seed = new Seed(db);
         await seed.SeedData();
         var dataService = new DataService(db);
-        
+
         // Act
         var houseSpirit = await db.HouseSpirits.FirstAsync();
         houseSpirit.SpiritScore = 40;
         await dataService.UpdateHouseSpirit([houseSpirit]);
-        
+
         // Assert
         var updatedHouseSpirit = await db.HouseSpirits.FirstAsync();
         Assert.Equal(40, updatedHouseSpirit.SpiritScore);
@@ -281,13 +281,40 @@ public class DataServiceTests
         await seed.SeedData();
         var dataService = new DataService(db);
         var results = await TestHelpers.CompleteAllEvents(db);
-        
+
         // Act
         var scoreCards = await dataService.GetHousesWithAggregatedScores();
-        
+
         // Assert
         Assert.Equal(4, scoreCards.Count);
         Assert.Equal(results["athletics"][HouseName.Elliott], scoreCards.Get(HouseName.Elliott).AthleticPoints);
+        Assert.Equal(results["athletics"][HouseName.Sturt], scoreCards.Get(HouseName.Sturt).AthleticPoints);
+        Assert.Equal(results["athletics"][HouseName.Wickham], scoreCards.Get(HouseName.Wickham).AthleticPoints);
+        Assert.Equal(results["athletics"][HouseName.Leslie], scoreCards.Get(HouseName.Leslie).AthleticPoints);
+        Assert.Equal(results["spirit"][HouseName.Elliott], scoreCards.Get(HouseName.Elliott).SpiritPoints);
         Assert.Equal(results["spirit"][HouseName.Sturt], scoreCards.Get(HouseName.Sturt).SpiritPoints);
+        Assert.Equal(results["spirit"][HouseName.Wickham], scoreCards.Get(HouseName.Wickham).SpiritPoints);
+        Assert.Equal(results["spirit"][HouseName.Leslie], scoreCards.Get(HouseName.Leslie).SpiritPoints);
+    }
+
+    [Fact]
+    public async Task UpdateWholeSchoolEvents_WhenPassedEmptyScoreCardsList_DoesNotUpdateScores()
+    {
+        // Arrange
+        var db = GetDbContext();
+        var seed = new Seed(db);
+        await seed.SeedData();
+        var dataService = new DataService(db);
+
+        // Act
+        await dataService.UpdateWholeSchoolEventScores(new List<ScoreCard>());
+
+        // Assert
+        var houses = await db.Houses.ToListAsync();
+        foreach (var house in houses)
+        {
+            Assert.Equal(0, house.SchoolEventAthleticScore);
+            Assert.Equal(0, house.SchoolEventSpiritScore);
+        }
     }
 }

@@ -14,4 +14,31 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Account\Shared\AccountLayout.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\ExternalLoginPicker.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\ManageLayout.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\ManageNavMenu.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\RedirectToLogin.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\ShowRecoveryCodes.razor" />
+    <_ContentIncludedByDefault Remove="Account\Shared\StatusMessage.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\ChangePassword.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\DeletePersonalData.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\Disable2fa.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\Email.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\EnableAuthenticator.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\ExternalLogins.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\GenerateRecoveryCodes.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\Index.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\PersonalData.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\ResetAuthenticator.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\SetPassword.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\TwoFactorAuthentication.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Manage\_Imports.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Login.razor" />
+    <_ContentIncludedByDefault Remove="Account\Pages\Register.razor" />
+    <_ContentIncludedByDefault Remove="Account\RedirectToLogin.razor" />
+    <_ContentIncludedByDefault Remove="Account\StatusMessage.razor" />
+  </ItemGroup>
+
 </Project>
