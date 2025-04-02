@@ -4,14 +4,17 @@ using SportsDayScoring.Models;
 
 namespace SportsDayScoring.Data;
 
-public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : IdentityDbContext<ApplicationUser>(options)
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Room> Rooms { get; set; }
     public DbSet<HouseEvent> HouseEvents { get; set; }
     public DbSet<House> Houses { get; set; }
     public DbSet<HouseSpirit> HouseSpirits { get; set; }
 
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+        Database.EnsureCreated();
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
