@@ -22,15 +22,10 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - name: Install dotnet-ef tool
-        run: dotnet tool install --global dotnet-ef
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
-      - name: Apply database migrations
-        run: dotnet ef database update --project src
-          
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
@@ -46,13 +41,23 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
       
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6336852560A64A1BBC29CF4340AF9F5D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9A97CE2A860A424EB6A454991C3BC51A }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7A42C577A2E74133A54E9C070C4486B5 }}
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -60,4 +65,4 @@ jobs:
           app-name: 'flatties-sports-day'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A27CE69607994769B16D3C217EF1455D }}
+          
