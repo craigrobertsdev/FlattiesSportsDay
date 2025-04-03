@@ -4,6 +4,7 @@
 @using static AppConstants
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 @* @attribute [Authorize] *@
 
@@ -12,7 +13,7 @@
 <div class="h-full flex flex-col justify-center items-center">
     <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day</h1>
     <h2 class="text-3xl pb-8 text-center text-bold">@(DateTime.Now.Year)</h2>
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col justify-center h-full gap-4">
         <div class="flex gap-2">
             <select @bind="SelectedRoom" class="border border-black rounded-md p-2">
                 <option selected disabled hidden>Select a room</option>
@@ -35,11 +36,17 @@
         <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[3]].BackgroundColour)"
                 @onclick="GoToScores">Score Cards
         </button>
-        <button class="border rounded-md text-center text-lg p-2 bg-red-800" @onclick="SeedData">Reset data - do not
-            touch
-        </button>
     </div>
+    <button class="border rounded-md text-center text-lg p-2 bg-red-800 mt-auto" @onclick="OpenDialog">Reset data - do
+        not
+        touch
+    </button>
 </div>
+
+<dialog id="dialog" class="p-4">
+    <button class="border rounded-md text-center text-lg p-2 mr-4 bg-red-800 mt-auto" @onclick="ConfirmResetData">Continue</button>
+    <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[1]].BackgroundColour) mt-auto" @onclick="CloseDialog">Cancel</button>
+</dialog>
 
 @code {
     [Inject] ApplicationDbContext Context { get; set; } = null!;
@@ -71,4 +78,19 @@
         NavigationManager.NavigateTo("/scores");
     }
 
+    private async Task OpenDialog()
+    {
+       await JSRuntime.InvokeVoidAsync("openDialog");
+    }
+
+    private async Task ConfirmResetData()
+    {
+        await SeedData();
+        await JSRuntime.InvokeVoidAsync("closeDialog");
+    }
+
+    private async Task CloseDialog()
+    {
+        await JSRuntime.InvokeVoidAsync("closeDialog");
+    }
 }

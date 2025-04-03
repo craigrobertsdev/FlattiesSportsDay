@@ -24,7 +24,7 @@
     {
         @foreach (var ev in Room.HouseEvents)
         {
-            <EventCard HouseEvent="@ev" Parent="this" />
+            <EventCard HouseEvent="@ev" Parent="this"/>
         }
     }
 </div>
@@ -61,7 +61,7 @@
         while (Room.HouseEvents[idx].IsSaved)
         {
             idx++;
-            
+
             if (idx == Room.HouseEvents.Count)
             {
                 idx = 0;
@@ -80,8 +80,9 @@
                 idx = 0;
             }
         }
-        
+
         Room.HouseEvents = orderedEvents;
         StateHasChanged();
     }
+
 }
