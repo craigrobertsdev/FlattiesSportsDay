@@ -17,6 +17,9 @@ This application has been designed in consultation with the school and is specif
 
 The app leverages the power of ASP.NET Core Blazor Server, Tailwind CSS and uses a SQLite Database. It is hosted in Microsoft Azure's App Service. 
 
+## Usage
+This app can be accessed at [flatties-sports-day.azurewebsites.net](flatties-sports-day.azurewebsites.net).
+
 ## Questions
 
 If you would like to discuss this project further, please contact me at craig.roberts11@outlook.com, or via [LinkedIn](https://www.linkedin.com/in/craig-roberts-9ba409243/).
