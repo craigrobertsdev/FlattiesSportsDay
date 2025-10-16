@@ -58,9 +58,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_6336852560A64A1BBC29CF4340AF9F5D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9A97CE2A860A424EB6A454991C3BC51A }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7A42C577A2E74133A54E9C070C4486B5 }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          tenant-id: ${{ secrets.TENANT_ID }}
+          subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
 
       - name: Dump OIDC token
@@ -76,3 +76,4 @@ jobs:
           package: .
 
           
+
