@@ -62,11 +62,7 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
           enable-AzPSSession: true
-
-      - name: Dump OIDC token
-        run: |
-         echo "${{ steps.login.outputs.token }}"
-
+          
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -76,4 +72,5 @@ jobs:
           package: .
 
           
+
 
