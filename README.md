@@ -1,4 +1,4 @@
-# Sports Day Scoring
+# Flatties Sports Day
 
 ## Table of Contents
 
@@ -22,7 +22,7 @@ This app can be accessed at [flatties-sports-day.azurewebsites.net](flatties-spo
 
 ## Questions
 
-If you would like to discuss this project further, please contact me at craig.roberts11@outlook.com, or via [LinkedIn](https://www.linkedin.com/in/craig-roberts-9ba409243/).
+If you would like to discuss this project further, please contact me at craig.roberts11@outlook.com, or via [LinkedIn](https://www.linkedin.com/in/craigroberts91/).
 
 ## Licence
 
