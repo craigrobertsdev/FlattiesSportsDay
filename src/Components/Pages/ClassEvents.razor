@@ -3,31 +3,39 @@
 @using SportsDayScoring.Data
 @using SportsDayScoring.Models
 
-@* @attribute [Authorize] *@
+@attribute [Authorize]
 
-<h1 class="text-xl text-center font-bold px-4 items-center relative">
-    Room @RoomNumber
-    <span class="absolute right-[3px] top-[3px] font-normal rounded-md px-2 bg-sky-200 border border-black">
-        <a href="/">Return Home</a>
-    </span>
-</h1>
+@* Page header *@
+<div class="flex items-center gap-2 mb-3">
+    <a href="/" class="rounded-xl bg-white border border-slate-200 px-2 py-1.5 text-sm text-slate-600 shadow-sm">← Back</a>
+    <div>
+        <h1 class="text-lg font-bold">Room @RoomNumber</h1>
+        @if (Room is not null)
+        {
+            var done = Room.HouseEvents.Count(e => e.IsSaved);
+            <p class="text-xs text-slate-500">@done / @Room.HouseEvents.Count events complete</p>
+        }
+    </div>
+</div>
+
 @if (_error != null)
 {
-    <div class="text-red-600">@_error</div>
+    <div class="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-700 mb-3">@_error</div>
 }
-<div class="overflow-x-auto my-2">
-    @if (Room is null)
-    {
-        <p>Loading...</p>
-    }
-    else
-    {
+
+@if (Room is null)
+{
+    <div class="text-center text-slate-400 py-6">Loading…</div>
+}
+else
+{
+    <div class="flex flex-col gap-3">
         @foreach (var ev in Room.HouseEvents)
         {
             <EventCard HouseEvent="@ev" Parent="this"/>
         }
-    }
-</div>
+    </div>
+}
 
 @code {
     [Parameter] public int RoomNumber { get; set; }
@@ -52,21 +60,13 @@
 
     private void OnEventSaved()
     {
-        if (Room is null)
-        {
-            return;
-        }
+        if (Room is null) return;
 
         var idx = 0;
         while (Room.HouseEvents[idx].IsSaved)
         {
             idx++;
-
-            if (idx == Room.HouseEvents.Count)
-            {
-                idx = 0;
-                break;
-            }
+            if (idx == Room.HouseEvents.Count) { idx = 0; break; }
         }
 
         var orderedEvents = new List<HouseEvent>();
@@ -74,15 +74,10 @@
         {
             orderedEvents.Add(Room.HouseEvents[idx]);
             idx++;
-
-            if (idx == Room.HouseEvents.Count)
-            {
-                idx = 0;
-            }
+            if (idx == Room.HouseEvents.Count) idx = 0;
         }
 
         Room.HouseEvents = orderedEvents;
         StateHasChanged();
     }
-
 }

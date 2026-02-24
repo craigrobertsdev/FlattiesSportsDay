@@ -1,7 +1,15 @@
 @inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
-<div class="h-full">
-    @Body
+<div class="min-h-screen bg-slate-50 text-slate-900">
+    <header class="flex items-center justify-end px-4 py-2 bg-white shadow-sm">
+        <button @onclick="Logout" class="text-sm text-slate-600 hover:text-slate-900 border border-slate-300 rounded-md px-3 py-1">
+            Log out
+        </button>
+    </header>
+    <main class="mx-auto w-full max-w-sm px-4 py-4">
+        @Body
+    </main>
 </div>
 
 <div id="blazor-error-ui">
@@ -9,3 +17,10 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+@code {
+    private void Logout()
+    {
+        NavigationManager.NavigateTo("/Account/Logout", forceLoad: true);
+    }
+}

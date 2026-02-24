@@ -4,81 +4,121 @@
 @using SportsDayScoring.Data
 @using static AppConstants
 @inject NavigationManager NavigationManager
-@* @attribute [Authorize] *@
+@attribute [Authorize]
 
-<div class="flex flex-col gap-2 p-2 w-[300px] items-center justify-center mx-auto">
-    <div class="flex gap-4 w-full items-center justify-center m-2">
+@* Page header *@
+<div class="flex items-center gap-2 mb-3">
+    <a href="/" class="rounded-xl bg-white border border-slate-200 px-2 py-1.5 text-sm text-slate-600 shadow-sm">← Back</a>
+    <h1 class="text-lg font-bold">School Events</h1>
+</div>
+
+<div class="flex flex-col gap-2">
+    @* Event picker *@
+    <div class="rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
+        <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-1 block">Select Event</label>
         <select @bind="SelectedEvent"
-                class="border border-black rounded-md bg-slate-200 font-bold text-center p-2 w-full">
-            <option disabled selected hidden>Select Event</option>
+                class="w-full rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold focus:border-blue-400 focus:outline-none">
+            <option disabled selected hidden>Choose an event…</option>
             @foreach (var ev in AppConstants.SchoolEvents)
             {
                 <option value="@ev">@ev</option>
             }
         </select>
     </div>
-    <div class="flex gap-4 w-[200px] items-center justify-center">
-        <p class="font-bold">40 points</p>
-        <select @bind="FortyPoints" class="font-bold border border-black rounded-md @(GetBgColour(FortyPoints)) p-2">
-            <option disabled selected hidden></option>
-            @foreach (var houseName in HouseNames)
-            {
-                <option value="@houseName">
-                    <p class="h-[20px] w-[20px]">@houseName</p>
-                </option>
-            }
-        </select>
-    </div>
-    <div class="flex gap-4 w-[200px] items-center justify-center">
-        <p class="font-bold">30 points</p>
-        <select @bind="ThirtyPoints" class="font-bold border border-black rounded-md @(GetBgColour(ThirtyPoints)) p-2">
-            <option disabled selected hidden></option>
-            @foreach (var houseName in HouseNames)
-            {
-                <option value="@houseName">
-                    <p class="h-[20px] w-[20px]">@houseName</p>
-                </option>
-            }
-        </select>
-    </div>
-    <div class="flex gap-4 w-[200px] items-center justify-center">
-        <p class="font-bold">20 points</p>
-        <select @bind="TwentyPoints" class="font-bold border border-black rounded-md @(GetBgColour(TwentyPoints)) p-2">
-            <option disabled selected hidden></option>
-            @foreach (var houseName in HouseNames)
-            {
-                <option value="@houseName">
-                    <p class="h-[20px] w-[20px]">@houseName</p>
-                </option>
-            }
-        </select>
-    </div>
-    @if (SelectedEvent is "Tug of War" or "Team Chants")
+
+    @* Place pickers *@
+    @if (SelectedEvent != null)
     {
-        <div class="flex gap-4 w-[200px] items-center justify-center">
-            <p class="font-bold">10 points</p>
-            <select @bind=TenPoints class="font-bold border border-black rounded-md @(GetBgColour(TenPoints)) p-2">
-                <option disabled selected hidden></option>
-                @foreach (var houseName in HouseNames)
-                {
-                    <option value="@houseName">
-                        <p class="h-[20px] w-[20px]">@houseName</p>
-                    </option>
-                }
-            </select>
+        <div class="flex flex-col gap-2">
+            @* 1st place *@
+            <div class="rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-700">🥇 1st Place</span>
+                    <span class="text-xs font-bold text-slate-400">40 pts</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    @foreach (var houseName in HouseNames)
+                    {
+                        var hn = houseName;
+                        <button @onclick="() => FortyPoints = hn"
+                                class="rounded-xl py-2 text-xs font-bold text-white @(HouseStyles[hn].BackgroundColour) @(FortyPoints != null && FortyPoints != hn ? "opacity-30" : "opacity-100") @(FortyPoints == hn ? "ring-2 ring-offset-1 ring-slate-600" : "")">
+                            @hn
+                        </button>
+                    }
+                </div>
+            </div>
+
+            @* 2nd place *@
+            <div class="rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-700">🥈 2nd Place</span>
+                    <span class="text-xs font-bold text-slate-400">30 pts</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    @foreach (var houseName in HouseNames)
+                    {
+                        var hn = houseName;
+                        <button @onclick="() => ThirtyPoints = hn"
+                                class="rounded-xl py-2 text-xs font-bold text-white @(HouseStyles[hn].BackgroundColour) @(ThirtyPoints != null && ThirtyPoints != hn ? "opacity-30" : "opacity-100") @(ThirtyPoints == hn ? "ring-2 ring-offset-1 ring-slate-600" : "")">
+                            @hn
+                        </button>
+                    }
+                </div>
+            </div>
+
+            @* 3rd place *@
+            <div class="rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
+                <div class="flex items-center justify-between mb-1.5">
+                    <span class="text-xs font-bold text-slate-700">🥉 3rd Place</span>
+                    <span class="text-xs font-bold text-slate-400">20 pts</span>
+                </div>
+                <div class="grid grid-cols-4 gap-1.5">
+                    @foreach (var houseName in HouseNames)
+                    {
+                        var hn = houseName;
+                        <button @onclick="() => TwentyPoints = hn"
+                                class="rounded-xl py-2 text-xs font-bold text-white @(HouseStyles[hn].BackgroundColour) @(TwentyPoints != null && TwentyPoints != hn ? "opacity-30" : "opacity-100") @(TwentyPoints == hn ? "ring-2 ring-offset-1 ring-slate-600" : "")">
+                            @hn
+                        </button>
+                    }
+                </div>
+            </div>
+
+            @* 4th place — only for Tug of War / Team Chants *@
+            @if (SelectedEvent is "Tug of War" or "Team Chants")
+            {
+                <div class="rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-bold text-slate-700">4th Place</span>
+                        <span class="text-xs font-bold text-slate-400">10 pts</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1.5">
+                        @foreach (var houseName in HouseNames)
+                        {
+                            var hn = houseName;
+                            <button @onclick="() => TenPoints = hn"
+                                    class="rounded-xl py-2 text-xs font-bold text-white @(HouseStyles[hn].BackgroundColour) @(TenPoints != null && TenPoints != hn ? "opacity-30" : "opacity-100") @(TenPoints == hn ? "ring-2 ring-offset-1 ring-slate-600" : "")">
+                                @hn
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
         </div>
     }
+
     @if (_errorMessage is not null)
     {
-        <p class="text-red-500">@_errorMessage</p>
+        <div class="rounded-xl bg-red-50 border border-red-200 px-3 py-2 text-xs text-red-700">
+            ⚠️ @_errorMessage
+        </div>
     }
 
-    <button
-        class="@(SaveScoresIsDisabled() ? "bg-transparent" : _errorMessage != null ? "bg-red-600" : "bg-green-500") font-bold border rounded-md p-2 w-full"
-        disabled="@(SaveScoresIsDisabled())"
-        @onclick="SaveScoresAsync">Save Scores
+    <button class="w-full rounded-2xl py-2.5 text-sm font-bold text-white shadow-sm @(SaveScoresIsDisabled() ? "bg-slate-300" : "bg-green-600")"
+            disabled="@SaveScoresIsDisabled()"
+            @onclick="SaveScoresAsync">
+        ✓ Save Scores
     </button>
-    <a href="/" class="bg-sky-200 font-bold p-2 w-full rounded-md text-center">Return Home</a>
 </div>
 
 @code {
@@ -95,36 +135,28 @@
     protected override void OnInitialized()
     {
         foreach (var houseName in HouseNames)
-        {
             _eventScores.Add(new ScoreCard(houseName));
-        }
     }
 
-    private string GetBgColour(HouseName? houseName)
-    {
-        return houseName is null ? "" : HouseStyles[houseName.Value].BackgroundColour;
-    }
 
     private async Task SaveScoresAsync()
     {
         _errorMessage = null;
 
         if (FortyPoints is null || ThirtyPoints is null || TwentyPoints is null
-            || (SelectedEvent == "Tug of War" && TenPoints is null) || (SelectedEvent == "Team Chants" && TenPoints is null))
+            || ((SelectedEvent == "Tug of War" || SelectedEvent == "Team Chants") && TenPoints is null))
         {
-            _errorMessage = "Please select a house for each score";
+            _errorMessage = "Please select a house for each place";
             return;
         }
 
-        if (SelectedEvent != "Team Chants") // Team chants only gets spirit score
+        if (SelectedEvent != "Team Chants")
         {
             _eventScores.First(sc => sc.HouseName == FortyPoints).AthleticPoints += 40;
             _eventScores.First(sc => sc.HouseName == ThirtyPoints).AthleticPoints += 30;
             _eventScores.First(sc => sc.HouseName == TwentyPoints).AthleticPoints += 20;
             if (SelectedEvent == "Tug of War")
-            {
                 _eventScores.First(sc => sc.HouseName == TenPoints).AthleticPoints += 10;
-            }
         }
         else
         {
@@ -140,12 +172,7 @@
 
     private bool SaveScoresIsDisabled()
     {
-        return SelectedEvent is null || FortyPoints is null
-               || ThirtyPoints is null
-               || TwentyPoints is null
-               || (SelectedEvent == "Tug of War" && TenPoints is null)
-               || (SelectedEvent == "Team Chants" && TenPoints is null);
+        return SelectedEvent is null || FortyPoints is null || ThirtyPoints is null || TwentyPoints is null
+               || ((SelectedEvent == "Tug of War" || SelectedEvent == "Team Chants") && TenPoints is null);
     }
-
 }
-

@@ -4,7 +4,7 @@ using SportsDayScoring.Models;
 
 namespace SportsDayScoring.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
     public DbSet<Room> Rooms { get; set; }
     public DbSet<HouseEvent> HouseEvents { get; set; }
@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // base.OnModelCreating(modelBuilder);
+        base.OnModelCreating(modelBuilder);
         
         modelBuilder.Entity<Room>()
             .HasKey(x => x.Id);

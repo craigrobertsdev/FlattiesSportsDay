@@ -1,0 +1,23 @@
+@page "/Account/Logout"
+
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using SportsDayScoring.Data
+
+@attribute [AllowAnonymous]
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@code {
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // This runs during SSR on the initial HTTP GET, before the response starts,
+        // so modifying the cookie here is safe.
+        await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+        HttpContext.Response.Redirect("/Account/Login");
+    }
+}

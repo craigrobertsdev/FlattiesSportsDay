@@ -4,61 +4,67 @@
 @using SportsDayScoring.Data
 @using static AppConstants
 
-@inject NavigationManager NavigationManager
-@* @attribute [Authorize] *@
+@attribute [Authorize]
 
-<div class="p-2 w-full">
-    <h1 class="text-3xl text-center font-bold pb-4">Score Cards</h1>
-    <div class="flex flex-col gap-2">
-        @if (_athleticsScoreCards.Count == 0)
-        {
-            <div>Loading...</div>
-        }
-        else
-        {
-            // Athletics scores table
-            <h2 class="text-2xl text-center font-bold">Athletics Scores</h2>
-            <div class="grid grid-cols-[0.2fr_0.7fr_0.5fr] text-center border">
-                @for (int i = 0; i < _athleticsScoreCards.Count; i++)
-                {
-                    <div
-                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(GetPlaceText(_athleticsScoreCards[i].Place))</div>
-                    <div
-                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@_athleticsScoreCards[i].ScoreCard.HouseName</div>
-                    <div
-                        class="border py-1 @(HouseStyles[_athleticsScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(_athleticsScoreCards[i].ScoreCard.AthleticPoints) points
-                    </div>
-                }
+@* Page header *@
+<div class="flex items-center gap-2 mb-3">
+    <a href="/" class="rounded-xl bg-white border border-slate-200 px-2 py-1.5 text-sm text-slate-600 shadow-sm">← Back</a>
+    <h1 class="text-lg font-bold">Leaderboard</h1>
+</div>
 
-            </div>
-
-            // Spirit scores table
-            <h2 class="text-2xl text-center font-bold">Spirit Scores</h2>
-            <div class="grid grid-cols-[0.2fr_0.7fr_0.5fr] text-center border">
-                @for (int i = 0; i < _spiritScoreCards.Count; i++)
-                {
-                    <div
-                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(GetPlaceText(_spiritScoreCards[i].Place))</div>
-                    <div
-                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@_spiritScoreCards[i].ScoreCard.HouseName</div>
-                    <div
-                        class="border py-1 @(HouseStyles[_spiritScoreCards[i].ScoreCard.HouseName].BackgroundColour)">@(_spiritScoreCards[i].ScoreCard.SpiritPoints) points
-                    </div>
-                }
-
-            </div>
-        }
+@if (_athleticsScoreCards.Count == 0)
+{
+    <div class="text-center text-slate-400 py-6">Loading scores…</div>
+}
+else
+{
+    @* Tabs *@
+    <div class="flex rounded-2xl bg-slate-200 p-1 gap-1 mb-3">
+        <button class="flex-1 rounded-xl py-1.5 text-sm font-bold transition-colors @(_activeTab == "athletics" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500")"
+                @onclick='() => _activeTab = "athletics"'>
+            🏃 Athletics
+        </button>
+        <button class="flex-1 rounded-xl py-1.5 text-sm font-bold transition-colors @(_activeTab == "spirit" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500")"
+                @onclick='() => _activeTab = "spirit"'>
+            ⭐ Spirit
+        </button>
     </div>
-</div>
 
-<div class="w-full text-right px-2 pb-2">
-    <button class="bg-sky-200 font-bold p-2 mx-auto" @onclick="GoHome">Return Home</button>
-</div>
+    @if (_activeTab == "athletics")
+    {
+        <div class="flex flex-col gap-1.5">
+            @for (int i = 0; i < _athleticsScoreCards.Count; i++)
+            {
+                var card = _athleticsScoreCards[i];
+                <div class="flex items-center gap-3 rounded-2xl @(HouseStyles[card.ScoreCard.HouseName].BackgroundColour) px-3 py-2 shadow-sm">
+                    <span class="text-xl w-7 text-center">@GetMedal(card.Place)</span>
+                    <span class="flex-1 text-sm font-bold text-white">@card.ScoreCard.HouseName</span>
+                    <span class="text-sm font-bold text-white opacity-90">@card.ScoreCard.AthleticPoints pts</span>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="flex flex-col gap-1.5">
+            @for (int i = 0; i < _spiritScoreCards.Count; i++)
+            {
+                var card = _spiritScoreCards[i];
+                <div class="flex items-center gap-3 rounded-2xl @(HouseStyles[card.ScoreCard.HouseName].BackgroundColour) px-3 py-2 shadow-sm">
+                    <span class="text-xl w-7 text-center">@GetMedal(card.Place)</span>
+                    <span class="flex-1 text-sm font-bold text-white">@card.ScoreCard.HouseName</span>
+                    <span class="text-sm font-bold text-white opacity-90">@card.ScoreCard.SpiritPoints pts</span>
+                </div>
+            }
+        </div>
+    }
+}
 
 @code {
     [Inject] public DataService DataService { get; set; } = null!;
     private List<OrderedScoreCard> _athleticsScoreCards = [];
     private List<OrderedScoreCard> _spiritScoreCards = [];
+    private string _activeTab = "athletics";
 
     protected override async Task OnInitializedAsync()
     {
@@ -69,14 +75,9 @@
         for (int i = 0; i < scoreCards.Count; i++)
         {
             if (i > 0 && scoreCards[i].AthleticPoints == scoreCards[i - 1].AthleticPoints)
-            {
                 _athleticsScoreCards.Add(new OrderedScoreCard(_athleticsScoreCards[i - 1].Place, scoreCards[i]));
-            }
             else
-            {
                 _athleticsScoreCards.Add(new OrderedScoreCard(place, scoreCards[i]));
-            }
-
             place++;
         }
 
@@ -86,31 +87,20 @@
         for (int i = 0; i < scoreCards.Count; i++)
         {
             if (i > 0 && scoreCards[i].SpiritPoints == scoreCards[i - 1].SpiritPoints)
-            {
                 _spiritScoreCards.Add(new OrderedScoreCard(_spiritScoreCards[i - 1].Place, scoreCards[i]));
-            }
             else
-            {
                 _spiritScoreCards.Add(new OrderedScoreCard(place, scoreCards[i]));
-            }
-
             place++;
         }
     }
 
-    private void GoHome()
+    private string GetMedal(int place) => place switch
     {
-        NavigationManager.NavigateTo("/");
-    }
-
-    private string GetPlaceText(int i) =>
-        i switch
-        {
-            1 => "1st",
-            2 => "2nd",
-            3 => "3rd",
-            _ => $"{i}th"
-        };
+        1 => "🥇",
+        2 => "🥈",
+        3 => "🥉",
+        _ => $"{place}th"
+    };
 
     record OrderedScoreCard(int Place, ScoreCard ScoreCard);
 

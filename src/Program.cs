@@ -11,18 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// builder.Services.AddCascadingAuthenticationState();
-// builder.Services.AddScoped<IdentityUserAccessor>();
-// builder.Services.AddScoped<IdentityRedirectManager>();
-// builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-//
-// builder.Services.AddAuthentication(options =>
-// {
-//     options.DefaultScheme = IdentityConstants.ApplicationScheme;
-//     options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-//     
-// })
-// .AddIdentityCookies();
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<IdentityUserAccessor>();
+builder.Services.AddScoped<IdentityRedirectManager>();
+builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+})
+.AddIdentityCookies();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -30,15 +29,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.EnableSensitiveDataLogging();
 });
 
-// builder.Services.AddIdentityCore<ApplicationUser>(options =>
-//     {
-//         options.Password.RequireNonAlphanumeric = false;
-//     })
-//     .AddEntityFrameworkStores<ApplicationDbContext>()
-//     .AddSignInManager()
-//     .AddDefaultTokenProviders();
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+    {
+        options.Password.RequireNonAlphanumeric = false;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddScoped<DataService>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = options.DefaultPolicy;
+});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -55,15 +59,24 @@ else {
     app.UseHsts();
 }
 
-// using (var scope = app.Services.CreateScope())
-// {
-//     var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-//     dbContext.Database.Migrate();
-// }
-//
+// Seed default teacher account (DB is created by EnsureCreated in ApplicationDbContext)
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    const string defaultUsername = "teacher";
+    const string defaultPassword = "Teacher123";
+    if (await userManager.FindByNameAsync(defaultUsername) is null)
+    {
+        var defaultUser = new ApplicationUser { UserName = defaultUsername };
+        await userManager.CreateAsync(defaultUser, defaultPassword);
+    }
+}
+
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()

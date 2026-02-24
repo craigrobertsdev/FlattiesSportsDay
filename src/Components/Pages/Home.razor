@@ -6,46 +6,79 @@
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
 
-@* @attribute [Authorize] *@
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
-<div class="h-full flex flex-col justify-center items-center">
-    <h1 class="text-4xl pb-4 text-center text-bold">McLaren Flat Sports Day</h1>
-    <h2 class="text-3xl pb-8 text-center text-bold">@(DateTime.Now.Year)</h2>
-    <div class="flex flex-col justify-center h-full gap-4">
+<div class="flex flex-col gap-3">
+
+    @* Header *@
+    <header class="rounded-2xl bg-gradient-to-br from-blue-600 to-blue-800 px-4 py-3 text-center text-white shadow-md">
+        <h1 class="text-xl font-bold leading-tight">🏆 McLaren Flat Sports Day 🏆</h1>
+        <p class="text-blue-200 text-xs font-medium">@(DateTime.Now.Year)</p>
+    </header>
+
+    @* Class Events *@
+    <div class="rounded-2xl bg-white shadow-sm border border-slate-200 px-3 py-2 flex flex-col gap-2">
+        <p class="text-xs font-bold uppercase tracking-widest text-slate-500">Class Events</p>
         <div class="flex gap-2">
-            <select @bind="SelectedRoom" class="border border-black rounded-md p-2">
-                <option selected disabled hidden>Select a room</option>
+            <select @bind="SelectedRoom"
+                    class="flex-1 rounded-xl border-2 border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold focus:border-blue-400 focus:outline-none">
+                <option selected disabled hidden>Select room…</option>
                 @foreach (var room in RoomNumbers)
                 {
                     <option value="@room">Room @room</option>
                 }
             </select>
             <button @onclick="GoToClassEvents" disabled="@(SelectedRoom == null)"
-                    class="border rounded-md p-2 text-lg @(SelectedRoom == null ? "bg-transparent" : HouseStyles[HouseNames[0]].BackgroundColour)">
-                Class Events
+                    class="rounded-xl px-4 py-2 text-sm font-bold shadow-sm @(SelectedRoom == null ? "bg-slate-200 text-slate-400" : HouseStyles[HouseNames[0]].BackgroundColour + " text-white")">
+                Go →
             </button>
         </div>
-        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[1]].BackgroundColour)"
-                @onclick="GoToSchoolEvents">Whole School Events
+    </div>
+
+    @* Main nav buttons *@
+    <div class="flex flex-col gap-2 px-6">
+        <button @onclick="GoToSchoolEvents"
+                class="flex items-center gap-3 rounded-2xl border-0 px-4 py-2.5 text-left text-sm font-bold shadow-sm @(HouseStyles[HouseNames[1]].BackgroundColour) text-white">
+            <span class="text-xl">🏫</span>
+            <span>Whole School Events</span>
         </button>
-        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[2]].BackgroundColour)"
-                @onclick="GoToSpirit">Award Spirit Points
+        <button @onclick="GoToSpirit"
+                class="flex items-center gap-3 rounded-2xl border-0 px-4 py-2.5 text-left text-sm font-bold shadow-sm @(HouseStyles[HouseNames[2]].BackgroundColour) text-white">
+            <span class="text-xl">⭐</span>
+            <span>Award Spirit Points</span>
         </button>
-        <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[3]].BackgroundColour)"
-                @onclick="GoToScores">Leaderboard
+        <button @onclick="GoToScores"
+                class="flex items-center gap-3 rounded-2xl border-0 px-4 py-2.5 text-left text-sm font-bold shadow-sm @(HouseStyles[HouseNames[3]].BackgroundColour)">
+            <span class="text-xl">📊</span>
+            <span>Leaderboard</span>
         </button>
     </div>
-    <button class="border rounded-md text-center text-lg p-2 bg-red-800 mt-auto" @onclick="OpenDialog">Reset data - do
-        not
-        touch
-    </button>
+
+    @* Danger zone *@
+    <details class="rounded-2xl border border-red-200 bg-red-50">
+        <summary class="cursor-pointer list-none px-3 py-2 text-sm font-semibold text-red-700 select-none">
+            ⚠️ Danger zone
+        </summary>
+        <div class="px-3 pb-3">
+            <p class="mb-2 text-xs text-red-600">Resetting will clear all scores. This cannot be undone.</p>
+            <button @onclick="OpenDialog"
+                    class="w-full rounded-xl bg-red-700 px-4 py-2 text-sm font-bold text-white shadow-sm">
+                Reset all data
+            </button>
+        </div>
+    </details>
+
 </div>
 
-<dialog id="dialog" class="p-4">
-    <button class="border rounded-md text-center text-lg p-2 mr-4 bg-red-800 mt-auto" @onclick="ConfirmResetData">Continue</button>
-    <button class="border rounded-md text-center text-lg p-2 @(HouseStyles[HouseNames[1]].BackgroundColour) mt-auto" @onclick="CloseDialog">Cancel</button>
+<dialog id="dialog" class="w-80 rounded-2xl p-4 shadow-xl">
+    <h2 class="text-base font-bold text-slate-800 mb-1">Are you sure?</h2>
+    <p class="mb-3 text-sm text-slate-500">This will reset all scores for the day and cannot be undone.</p>
+    <div class="flex gap-2">
+        <button class="flex-1 rounded-xl bg-red-700 py-2 text-sm font-bold text-white" @onclick="ConfirmResetData">Yes, reset</button>
+        <button class="flex-1 rounded-xl bg-slate-200 py-2 text-sm font-bold text-slate-700" @onclick="CloseDialog">Cancel</button>
+    </div>
 </dialog>
 
 @code {
