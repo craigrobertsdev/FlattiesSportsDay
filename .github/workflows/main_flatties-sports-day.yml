@@ -31,13 +31,13 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish src/FlattiesSportsDay/FlattiesSportsDay.csproj -c Release -o ${{ github.workspace }}/publish
+        run: dotnet publish src/FlattiesSportsDay.csproj -c Release -o ${{ github.workspace }}/publish
       
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/publish
+          path: ${{ github.workspace }}/publish
 
   deploy:
     runs-on: ubuntu-latest
@@ -70,8 +70,9 @@ jobs:
         with:
           app-name: 'flatties-sports-day'
           slot-name: 'Production'
-          package: pubilsh
+          package: publish
 
           
+
 
 
