@@ -9,6 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 const IS_PROD = process.env.NODE_ENV === 'production';
 
+// Trust the first proxy (Azure / Railway terminate SSL at their load balancer)
+if (IS_PROD) app.set('trust proxy', 1);
+
 app.use(express.json());
 
 // ── Sessions ──────────────────────────────────────────────────────────────────
@@ -28,7 +31,7 @@ app.use(session({
 // ── Serve React build in production ───────────────────────────────────────────
 
 if (IS_PROD) {
-  const clientBuild = path.join(__dirname, '../client/dist');
+  const clientBuild = path.join(__dirname, 'client/dist');
   app.use(express.static(clientBuild));
 }
 
@@ -196,7 +199,7 @@ app.post('/api/reset', requireAuth, (req, res) => {
 // ── SPA fallback (production) ─────────────────────────────────────────────────
 
 if (IS_PROD) {
-  const clientBuild = path.join(__dirname, '../client/dist');
+  const clientBuild = path.join(__dirname, 'client/dist');
   app.get('*', (req, res) => {
     res.sendFile(path.join(clientBuild, 'index.html'));
   });

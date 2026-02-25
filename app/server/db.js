@@ -2,7 +2,7 @@ const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const path = require('path');
 
-const DB_PATH = process.env.DB_PATH || (process.env.NODE_ENV === 'production' ? '/data/sportsday.db' : path.join(__dirname, 'sportsday.db'));
+const DB_PATH = process.env.DB_PATH || (process.env.NODE_ENV === 'production' ? '/home/sportsday.db' : path.join(__dirname, 'sportsday.db'));
 const db = new Database(DB_PATH);
 
 db.pragma('journal_mode = WAL');
