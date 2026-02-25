@@ -23,10 +23,16 @@ builder.Services.AddAuthentication(options =>
 })
 .AddIdentityCookies();
 
+// On Azure App Service, /home is the persistent writable storage. Locally use the app directory.
+var dbPath = builder.Environment.IsProduction()
+    ? "/home/SportsDayScoring.db"
+    : "SportsDayScoring.db";
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlite("Data Source=SportsDayScoring.db");
-    options.EnableSensitiveDataLogging();
+    options.UseSqlite($"Data Source={dbPath}");
+    if (!builder.Environment.IsProduction())
+        options.EnableSensitiveDataLogging();
 });
 
 builder.Services.AddIdentityCore<ApplicationUser>(options =>

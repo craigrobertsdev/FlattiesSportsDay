@@ -27,8 +27,6 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish src/SportsDayScoring.csproj -c Release -o ${{ github.workspace }}/publish
