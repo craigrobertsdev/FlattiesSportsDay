@@ -3,7 +3,7 @@ const session = require('express-session');
 const SqliteStore = require('connect-sqlite3')(session);
 const bcrypt = require('bcryptjs');
 const path = require('path');
-const { db, resetData, HOUSE_NAMES, SCHOOL_EVENTS } = require('./db');
+const { db, resetData, HOUSE_NAMES, SCHOOL_EVENTS, DB_PATH } = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -14,7 +14,7 @@ app.use(express.json());
 // ── Sessions ──────────────────────────────────────────────────────────────────
 
 app.use(session({
-  store: new SqliteStore({ db: 'sessions.db', dir: path.dirname(process.env.DB_PATH || './sportsday.db') }),
+  store: new SqliteStore({ db: 'sessions.db', dir: path.dirname(DB_PATH) }),
   secret: process.env.SESSION_SECRET || 'sportsday-secret-change-in-prod',
   resave: false,
   saveUninitialized: false,
