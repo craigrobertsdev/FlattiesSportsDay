@@ -1,0 +1,10 @@
+{
+  "name": "sportsday-root",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "npm run build --prefix app/client",
+    "start": "npm run start --prefix app/server",
+    "install:all": "npm install --prefix app/server && npm install --prefix app/client"
+  }
+}
+
