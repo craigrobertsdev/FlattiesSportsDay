@@ -66,11 +66,11 @@ jobs:
           tenant-id: ${{ secrets.TENANT_ID }}
           subscription-id: ${{ secrets.SUBSCRIPTION_ID }}
 
-      - name: Set Azure Web App startup command
+      - name: Set Node.js startup command
         run: |
           az webapp config set \
             --name flatties-sports-day \
-            --resource-group $(az webapp list --query "[?name=='flatties-sports-day'].resourceGroup" -o tsv) \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --startup-file "node index.js"
 
       - name: Deploy to Azure Web App
