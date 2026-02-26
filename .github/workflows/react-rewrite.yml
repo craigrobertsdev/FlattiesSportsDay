@@ -70,7 +70,7 @@ jobs:
         run: |
           az webapp config set \
             --name flatties-sports-day \
-            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --resource-group FlattiesSportsDay \
             --startup-file "node index.js"
 
       - name: Deploy to Azure Web App
