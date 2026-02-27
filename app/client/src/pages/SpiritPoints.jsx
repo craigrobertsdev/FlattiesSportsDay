@@ -32,17 +32,17 @@ export default function SpiritPoints() {
 
         <div className="flex flex-col gap-2">
           {HOUSE_NAMES.map(h => (
-            <div key={h} className={`rounded-2xl ${HOUSE_STYLES[h].bg} px-4 py-2.5 shadow-sm flex items-center justify-between`}>
-              <span className="text-sm font-bold text-white drop-shadow">{h}</span>
+            <div key={h} className={`rounded-2xl ${HOUSE_STYLES[h].bg} ${HOUSE_STYLES[h].textOnBg} px-4 py-2.5 shadow-sm flex items-center justify-between`}>
+              <span className="text-sm font-bold drop-shadow">{h}</span>
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setScores(s => ({ ...s, [h]: clamp(s[h] - 10) }))}
-                  className="w-8 h-8 rounded-full bg-white/30 text-white font-bold text-lg leading-none"
+                  className="w-8 h-8 rounded-full bg-white/30 font-bold text-lg leading-none"
                 >−</button>
-                <span className="text-xl font-bold text-white w-8 text-center drop-shadow">{scores[h]}</span>
+                <span className="text-xl font-bold w-8 text-center drop-shadow">{scores[h]}</span>
                 <button
                   onClick={() => setScores(s => ({ ...s, [h]: clamp(s[h] + 10) }))}
-                  className="w-8 h-8 rounded-full bg-white/30 text-white font-bold text-lg leading-none"
+                  className="w-8 h-8 rounded-full bg-white/30 font-bold text-lg leading-none"
                 >+</button>
               </div>
             </div>
