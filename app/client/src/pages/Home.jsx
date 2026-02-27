@@ -46,7 +46,7 @@ export default function Home() {
             <button
               onClick={() => navigate(`/class-events/${selectedRoom}`)}
               disabled={!selectedRoom}
-              className={`rounded-xl px-4 py-2 text-sm font-bold shadow-sm text-white ${selectedRoom ? HOUSE_STYLES[HOUSE_NAMES[0]].bg : 'bg-slate-300'}`}
+              className={`rounded-xl px-4 py-2 text-sm font-bold shadow-sm ${selectedRoom ? HOUSE_STYLES[HOUSE_NAMES[0]].bg : 'bg-slate-300'} ${selectedRoom ? HOUSE_STYLES[HOUSE_NAMES[0]].textOnBg : 'text-white'}`}
             >
               Go →
             </button>
@@ -57,21 +57,21 @@ export default function Home() {
         <div className="flex flex-col gap-2 px-6">
           <button
             onClick={() => navigate('/school-events')}
-            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm text-white ${HOUSE_STYLES[HOUSE_NAMES[1]].bg}`}
+            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm ${HOUSE_STYLES[HOUSE_NAMES[1]].textOnBg} ${HOUSE_STYLES[HOUSE_NAMES[1]].bg}`}
           >
             <span className="text-xl">🏫</span>
             <span>Whole School Events</span>
           </button>
           <button
             onClick={() => navigate('/spirit')}
-            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm text-white ${HOUSE_STYLES[HOUSE_NAMES[2]].bg}`}
+            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm ${HOUSE_STYLES[HOUSE_NAMES[2]].textOnBg} ${HOUSE_STYLES[HOUSE_NAMES[2]].bg}`}
           >
             <span className="text-xl">⭐</span>
             <span>Award Spirit Points</span>
           </button>
           <button
             onClick={() => navigate('/scores')}
-            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm ${HOUSE_STYLES[HOUSE_NAMES[3]].bg}`}
+            className={`flex items-center gap-3 rounded-2xl px-4 py-2.5 text-left text-sm font-bold shadow-sm ${HOUSE_STYLES[HOUSE_NAMES[3]].textOnBg} ${HOUSE_STYLES[HOUSE_NAMES[3]].bg}`}
           >
             <span className="text-xl">📊</span>
             <span>Leaderboard</span>

@@ -66,7 +66,7 @@ export default function SchoolEvents() {
           <button
             key={h}
             onClick={() => setPlaces(p => ({ ...p, [placeKey]: h }))}
-            className={`rounded-xl py-2 text-xs font-bold text-white ${HOUSE_STYLES[h].bg} transition-opacity ${places[placeKey] !== null && places[placeKey] !== h ? 'opacity-30' : 'opacity-100'} ${places[placeKey] === h ? 'ring-2 ring-offset-1 ring-slate-600' : ''}`}
+            className={`rounded-xl py-2 text-xs font-bold ${HOUSE_STYLES[h].textOnBg} ${HOUSE_STYLES[h].bg} transition-opacity ${places[placeKey] !== null && places[placeKey] !== h ? 'opacity-30' : 'opacity-100'} ${places[placeKey] === h ? 'ring-2 ring-offset-1 ring-slate-600' : ''}`}
           >
             {h}
           </button>

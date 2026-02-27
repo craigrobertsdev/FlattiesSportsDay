@@ -9,7 +9,10 @@ function rankCards(cards, key) {
   const sorted = [...cards].sort((a, b) => b[key] - a[key]);
   let place = 1;
   return sorted.map((card, i) => {
-    if (i > 0 && card[key] === sorted[i - 1][key]) return { place: sorted[i - 1]._place, card };
+    if (i > 0 && card[key] === sorted[i - 1][key]){
+      sorted[i]._place = sorted[i - 1]._place;
+      return { place: sorted[i - 1]._place, card }; 
+    }
     const p = { place, card };
     sorted[i]._place = place;
     place++;
@@ -67,8 +70,8 @@ export default function Scores() {
                 {ranked.map(({ place, card }) => (
                   <div key={card.house_name} className={`flex items-center gap-3 rounded-2xl ${HOUSE_STYLES[card.house_name].bg} px-3 py-2 shadow-sm`}>
                     <span className="text-xl w-7 text-center">{medal(place)}</span>
-                    <span className="flex-1 text-sm font-bold text-white">{card.house_name}</span>
-                    <span className="text-sm font-bold text-white opacity-90">{card[pointsKey]} pts</span>
+                    <span className={`flex-1 text-sm font-bold  ${HOUSE_STYLES[card.house_name].textOnBg}`}>{card.house_name}</span>
+                    <span className={`text-sm font-bold opacity-90 ${HOUSE_STYLES[card.house_name].textOnBg}`}>{card[pointsKey]} pts</span>
                   </div>
                 ))}
               </div>

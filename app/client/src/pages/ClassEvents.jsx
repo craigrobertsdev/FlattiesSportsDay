@@ -72,14 +72,14 @@ function EventCard({event, onSaved}) {
                             ) : (
                                 <>
                                     <select
-                                        className={`flex-1 rounded-lg ${style.bg} border-0 text-white text-xs font-semibold py-1.5 px-1 text-center`}
+                                        className={`flex-1 rounded-lg ${style.bg} border-0 ${style.textOnBg} text-xs font-semibold py-1.5 px-1 text-center`}
                                         value={card.athletic_points || ''}
                                         onChange={e => updateCard(houseName, 'athletic_points', e.target.value)}>
                                         <option value="" disabled hidden>Athletic</option>
                                         {ATHLETIC_SCORES.map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
                                     <select
-                                        className={`flex-1 rounded-lg ${style.bg} border-0 text-white text-xs font-semibold py-1.5 px-1 text-center`}
+                                        className={`flex-1 rounded-lg ${style.bg} border-0 ${style.textOnBg} text-xs font-semibold py-1.5 px-1 text-center`}
                                         value={card.spirit_points || ''}
                                         onChange={e => updateCard(houseName, 'spirit_points', e.target.value)}>
                                         <option value="" disabled hidden>Spirit</option>
